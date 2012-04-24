@@ -1,0 +1,51 @@
+body {
+    font-family: sans, sans-serif;
+}
+
+[lang='jp'] {
+    font-family: serif;
+}
+
+.template {
+    display: none;
+}
+
+.flashcard {
+    border: 1px solid black;
+    margin: 1em;
+    min-height: 5em;
+    min-width: 10em;
+    padding: 1em;
+    width: 0;
+}
+
+.correct {
+    background: #CFA;
+    border-color: #3C0;
+}
+
+.incorrect {
+    background: #FAA;
+    border-color: #C33;
+}
+
+.screen {
+    display: none;
+}
+
+.screen.main {
+    display: block;
+}
+
+label + input {
+    display: block;
+    position: relative;
+    left: 7em;
+    top: -2em;
+    width: 20em;
+}
+
+#source {
+    width: 30em;
+}
+

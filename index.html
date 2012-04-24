@@ -1,0 +1,146 @@
+<?xml encoding="utf-8"?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="charset" value="utf-8" />
+        <title>Wordleaf</title>
+        <link rel="stylesheet" type="text/css" charset="utf-8" href="style.css"/>
+    </head>
+    <body>
+        <h1>Wordleaf</h1>
+        <div class="screen main">
+            <div class="flashcard">
+            </div>
+            <form>
+                <input type="text" class="response"/>
+            </form>
+            <a class="list">View word list…</a>
+            <div id="magic">Magic</div>
+        </div>
+        <div class='screen wordlist'>
+            <h2>Words (<span class='wordCount'></span>)</h2>
+            <a class="add">Add new words...</a>
+            <div class='listedword template'>
+                <span class='source'></span>
+                <span class='de'></span>
+            </div>
+        </div>
+        <div class="screen add">
+            <label for="source">Source</label>
+            <input type="text" id="source"/>
+            <label for="de">Deutsch</label>
+            <input type="text" id="de"/>
+            <form>
+                <label for="en">English</label>
+                <input type="text" id="en"/>
+            </form>
+            <a class="done">Done</a>
+        </div>
+        <script type="application/javascript" src="lib/coffee-script-1.2.0.js"></script>
+        <script type="application/javascript" src="/_utils/script/couch.js"></script>
+        <script type="application/javascript" src="lib/jquery-1.7.1.js"></script>
+        <script type="application/javascript" src="lib/underscore-1.3.1.js"></script>
+        <script type="application/javascript">
+        </script>
+        <script type="text/coffeescript">
+            CouchDB.protocol = 'http'
+            db = new CouchDB('haryoku')
+
+            $card = $('.flashcard')
+            response = document.getElementsByClassName('response')[0]
+            addLink = document.getElementsByClassName('add')[0]
+            source = document.getElementById('source')
+            de = document.getElementById('de')
+            en = document.getElementById('en')
+            addForm = en.parentElement
+            doneLink = document.getElementsByClassName('done')[0]
+            listLink = document.getElementsByClassName('list')[0]
+            wordCount = document.getElementsByClassName('wordCount')[0]
+            next = null
+
+            random = (array) -> array[~~(Math.random() * array.length)]
+
+            recordResponse = (card, response) ->
+                (card.responses ||= []).push(response)
+                db.save(card)
+
+            giveFeedback = (result) ->
+                $card.addClass(result.interpretation ? 'correct' : 'incorrect');
+                $card.text(result.expected)
+
+            processInitialResponse = (evt) ->
+                evt.preventDefault()
+                result = {
+                    time: new Date().getTime(),
+                    prompt: next.de,
+                    expected: next.en,
+                    response: response.value,
+                    interpretation: response.value == next.en
+                }
+                recordResponse(next, result)
+                giveFeedback(result)
+                response.value = ''
+                response.parentElement.removeEventListener('submit', processInitialResponse);
+                response.parentElement.addEventListener('submit', processReinforcement);
+
+            processReinforcement = (evt) ->
+                evt.preventDefault()
+                if response.value == next.en
+                    response.parentElement.removeEventListener('submit', processReinforcement)
+                    $card.removeClass('correct', 'incorrect')
+                    showNextCard()
+                else
+                    $card.removeClass('correct').addClass('incorrect')
+                response.value = ''
+
+            showNextCard = ->
+                next_id = random(db.allDocs().rows).id
+                next = db.open(next_id)
+                $card.text(next.de)
+                response.parentElement.addEventListener('submit', processInitialResponse)
+                response.focus()
+
+            showNextCard()
+
+            displayScreen = (name) ->
+                screens = $('.screen')
+                active = screens.filter('.' + name)
+                active.show()
+                active.find('input').first().focus()
+                screens.not(active).hide()
+
+            listLink.addEventListener 'click', ->
+                displayScreen 'wordlist'
+                $('.listedword').not('.template').remove()
+                docs = db.allDocs().rows
+                wordCount.innerText = docs.length
+                template = $('.listedword.template')
+                docs.forEach (doc) ->
+                    doc = db.open(doc.id)
+                    node = template.clone().removeClass('template')
+                    child.innerText = doc[child.className] for child in node.children()
+                    node.insertBefore(template)
+
+            addLink.addEventListener 'click', -> displayScreen 'add'
+
+            addForm.addEventListener 'submit', (evt) ->
+                evt.preventDefault()
+                inputs = [source, de, en]
+                firstBlankInput = _.first inputs, (i) -> ! i.value
+                if firstBlankInput
+                    firstBlankInput.focus()
+                    return
+                doc = {}
+                doc[input.id] = input.value for input in inputs
+                db.save(doc)
+            doneLink.addEventListener 'click', -> displayScreen 'main'
+
+            $('#magic').click ->
+                db.allDocs().rows.forEach (doc) ->
+                    doc = db.open(doc.id)
+                    if doc.source == ''
+                        db.deleteDoc(doc)
+                        console.log(doc)
+        </script>
+    </body>
+</html>
