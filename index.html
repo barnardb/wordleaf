@@ -118,7 +118,7 @@
                 docs.forEach (doc) ->
                     doc = db.open(doc.id)
                     node = template.clone().removeClass('template')
-                    child.innerText = doc[child.className] for child in node.children()
+                    $(child).text doc[child.className] for child in node.children()
                     node.insertBefore(template)
 
             addLink.addEventListener 'click', -> displayScreen 'add'
@@ -126,9 +126,9 @@
             addForm.addEventListener 'submit', (evt) ->
                 evt.preventDefault()
                 inputs = [source, de, en]
-                firstBlankInput = _.first inputs, (i) -> ! i.value
+                firstBlankInput = _.find inputs, (i) -> ! i.value
                 if firstBlankInput
-                    firstBlankInput.focus()
+                    $(firstBlankInput).focus()
                     return
                 doc = {}
                 doc[input.id] = input.value for input in inputs
