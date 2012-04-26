@@ -6,19 +6,32 @@ if('indexedDB' in window) {
     indexedDB = mozIndexedDB;
 }
 
+var perform = function (request, callback) {
+    request.onsuccess = function(evt) {
+        callback(evt.target.result);
+    };
+    request.onfailure = function(evt) {
+        console.error.invoke(console, arguments);
+        throw evt;
+    };
+};
+
 var openDeck = function (name, callback) {
     var db;
 
+    var getTransactionalStore = function () {
+        return db.transaction(['Cards']).objectStore('Cards');
+    };
+
+    var performTransaction = function (action, callback) {
+        var store = getTransactionalStore();
+        perform(store[action](), function (result) {
+            callback(result, store);
+        });
+    };
+
     var getCardCount = function (callback) {
-        var t = db.transaction(['Cards']);
-        var store = t.objectStore('Cards');
-        var countRequest = store.count();
-        countRequest.onsuccess = function(evt) {
-            callback(evt.target.result, store);
-        };
-        countRequest.onfailure = function(evt) {
-            throw evt;
-        }
+        performTransaction('count', callback);
     };
 
     var deck = {
@@ -28,29 +41,20 @@ var openDeck = function (name, callback) {
             });
         },
         forEachCard: function (callback) {
-            var t = db.transaction(['Cards']);
-            var store = t.objectStore('Cards');
-            var cursor = store.openCursor();
-            cursor.onsuccess = function(evt) {
-                if(cursor.result)
-                    cursor = cursor.result;
+            performTransaction('openCursor', function(cursor) {
                 if(cursor && cursor.value) {
                     callback(cursor.value);
                     cursor.continue();
                 }
-            };
+            });
         },
         getRandomCard: function (callback) {
             getCardCount(function (count, store) {
-                var index = ~~(Math.random() * count) + 1;
-                var r = store.get(index);
-                r.onsuccess = function (evt) { callback(evt.target.result) };
+                perform(store.get(~~(Math.random() * count) + 1), callback);
             });
         },
         save: function (card) {
-            var t = db.transaction(['Cards'], IDBTransaction.READ_WRITE);
-            var store = t.objectStore('Cards');
-            store.put(card);
+            getTransactionalStore().put(card);
         }
     };
 
