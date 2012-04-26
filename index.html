@@ -109,7 +109,8 @@
             listLink.addEventListener 'click', ->
                 displayScreen 'wordlist'
                 $('.listedword').not('.template').remove()
-                wordCount.innerText = deck.size;
+                deck.getSize (size) ->
+                    $(wordCount).text size
                 template = $('.listedword.template')
                 deck.forEachCard (doc) ->
                     node = template.clone().removeClass('template')

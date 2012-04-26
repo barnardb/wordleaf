@@ -9,7 +9,24 @@ if('indexedDB' in window) {
 var openDeck = function (name, callback) {
     var db;
 
+    var getCardCount = function (callback) {
+        var t = db.transaction(['Cards']);
+        var store = t.objectStore('Cards');
+        var countRequest = store.count();
+        countRequest.onsuccess = function(evt) {
+            callback(evt.target.result, store);
+        };
+        countRequest.onfailure = function(evt) {
+            throw evt;
+        }
+    };
+
     var deck = {
+        getSize: function (callback) {
+            getCardCount(function (count) {
+                callback(count);
+            });
+        },
         forEachCard: function (callback) {
             var t = db.transaction(['Cards']);
             var store = t.objectStore('Cards');
@@ -24,17 +41,11 @@ var openDeck = function (name, callback) {
             };
         },
         getRandomCard: function (callback) {
-            var t = db.transaction(['Cards']);
-            var store = t.objectStore('Cards');
-            var countRequest = store.count();
-            countRequest.onsuccess = function(evt) {
-                var index = ~~(Math.random() * evt.target.result) + 1;
+            getCardCount(function (count, store) {
+                var index = ~~(Math.random() * count) + 1;
                 var r = store.get(index);
                 r.onsuccess = function (evt) { callback(evt.target.result) };
-            };
-            countRequest.onfailure = function(evt) {
-                throw evt;
-            }
+            });
         },
         save: function (card) {
             var t = db.transaction(['Cards'], IDBTransaction.READ_WRITE);
