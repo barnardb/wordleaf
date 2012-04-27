@@ -16,12 +16,35 @@ var perform = function (request, callback) {
     };
 };
 
+var openDatabase = function(name, version, upgradeCallback, openCallback) {
+    var request = indexedDB.open(name, version);
+    request.onupgradeneeded = function (evt) {
+        upgradeCallback(evt.target.result);
+    };
+    request.onsuccess = function (evt) {
+        database = evt.target.result;
+        if (database.version == version) {
+            openCallback(database);
+        } else {
+            console.log('new creation event missing, setting version');
+            perform(database.setVersion(version), function () {
+                console.log('success');
+                upgradeCallback(database);
+                openCallback(database);
+            });
+        }
+    };
+    request.onerror = function () {
+        console.error('Error trying to open database');
+    };
+};
+
 var openDeck = function (name, callback) {
-    var db;
+    var database;
 
     var getTransactionalStore = function (withWrite) {
         var mode = withWrite ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
-        return db.transaction(['Cards'], mode).objectStore('Cards');
+        return database.transaction(['Cards'], mode).objectStore('Cards');
     };
 
     var performTransaction = function (action, callback) {
@@ -59,23 +82,10 @@ var openDeck = function (name, callback) {
         }
     };
 
-    var request = indexedDB.open(name, 1);
-    request.onupgradeneeded = function (evt) {
-        evt.target.result.createObjectStore('Cards', { autoIncrement: true });
-    };
-    request.onsuccess = function (evt) {
-        db = evt.target.result;
-        if (db.objectStoreNames.contains('Cards')) {  //if(db.version) {
-            callback(deck);
-        } else {
-            //var r = db.setVersion('1');
-            //r.onsuccess = function() {
-                //console.log('success');
-                callback(deck);
-            //};
-        }
-    };
-    request.onerror = function () {
-        console.error('Error trying to open db');
-    };
+    openDatabase(name, 1, function(database) {
+        database.createObjectStore('Cards', { autoIncrement: true });
+    }, function(db) {
+        database = db;
+        callback(deck);
+    });
 };
