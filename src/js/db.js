@@ -19,8 +19,9 @@ var perform = function (request, callback) {
 var openDeck = function (name, callback) {
     var db;
 
-    var getTransactionalStore = function () {
-        return db.transaction(['Cards']).objectStore('Cards');
+    var getTransactionalStore = function (withWrite) {
+        var mode = withWrite ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
+        return db.transaction(['Cards'], mode).objectStore('Cards');
     };
 
     var performTransaction = function (action, callback) {
@@ -54,7 +55,7 @@ var openDeck = function (name, callback) {
             });
         },
         save: function (card) {
-            getTransactionalStore().put(card);
+            getTransactionalStore(true).put(card);
         }
     };
 
