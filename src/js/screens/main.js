@@ -22,8 +22,8 @@ function mainScreen ($screen) {
     function processReinforcement(evt) {
         log.trace();
         evt.preventDefault()
-        log.debugEquality('$response.val()', $response.val(), 'activeCard.en', activeCard.en);
-        if ($response.val() == activeCard.en) {
+        log.debugEquality('$response.val()', $response.val(), 'activeCard.back', activeCard.back);
+        if ($response.val() == activeCard.back) {
             $response.parent()[0].removeEventListener('submit', processReinforcement)
             $card.removeClass('correct incorrect')
             showNextCard()
@@ -31,17 +31,17 @@ function mainScreen ($screen) {
             $card.removeClass('correct').addClass('incorrect')
         }
         $response.val('')
-    };
+    }
 
     function processFirstResponse(evt) {
         log.trace();
         evt.preventDefault()
         result = {
             time: new Date().getTime(),
-            prompt: activeCard.de,
-            expected: activeCard.en,
+            prompt: activeCard.front,
+            expected: activeCard.back,
             response: $response.val(),
-            interpretation: $response.val() == activeCard.en
+            interpretation: $response.val() == activeCard.back
         }
         recordResponse(activeCard, result)
         giveFeedback(result)
@@ -54,14 +54,19 @@ function mainScreen ($screen) {
         log.trace();
         deck.getRandomCard(function (card) {
             activeCard = card
-            $card.text(card.prompt)
+            $card.text(card.front)
             $response.parent('form')[0].addEventListener('submit', processFirstResponse)
             $response.focus()
         })
     }
 
+    function ondisplay() {
+        log.trace(arguments);
+        activeCard || showNextCard()
+    }
+
     return {
-        showNextCard: showNextCard,
+        ondisplay: ondisplay,
         navigation: {
             list: $listLink
         }
