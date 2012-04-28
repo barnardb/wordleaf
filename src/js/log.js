@@ -20,14 +20,19 @@ var log = (function () {
 
     function debug() {
         console.debug.apply(console, ['DEBUG ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
-    };
+    }
+
+    function debugEquality(rhsRep, rhs, lhsRep, lhs) {
+        debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + inspect(rhs) + ' == ' + lhs + ') → ' + (rhs == lhs));
+    }
 
     function trace() {
         console.debug('TRACE ' + getLineSignature(1));
-    };
+    }
 
     return {
         debug: debug,
+        debugEquality: debugEquality,
         trace: trace
     };
 })();

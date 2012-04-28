@@ -19,8 +19,7 @@ var mainScreen = function() {
     function processReinforcement(evt) {
         log.trace();
         evt.preventDefault()
-        log.debug('$response.val()', $response.val());
-        log.debug('activeCard.en', activeCard.en);
+        log.debugEquality('$response.val()', $response.val(), 'activeCard.en', activeCard.en);
         if ($response.val() == activeCard.en) {
             $response.parent()[0].removeEventListener('submit', processReinforcement)
             $card.removeClass('correct incorrect')
