@@ -17,16 +17,12 @@ var app = (function app() {
     function initialiseScreen(name) {
         var $screen = $screens.filter('.' + name);
         var screen = eval(name + 'Screen($screen)');
-        if(screen.navigation) {
-            log.debug('processing navigation for', name);
-            log.debug('screen.navigation', screen.navigation);
-            for(var navigableScreen in screen.navigation) {
-                log.debug('mapping click on', screen.navigation[navigableScreen], 'to display screen', navigableScreen);
-                screen.navigation[navigableScreen].click(function () {
-                    displayScreen(navigableScreen);
-                })
-            }
-        }
+        _.each($screen.find('a'), function (link) {
+            log.debug('mapping click on', link, 'to display screen', link.className);
+            $(link).click(function () {
+                displayScreen(link.className);
+            })
+        })
         screens[name] = screen;
     }
 

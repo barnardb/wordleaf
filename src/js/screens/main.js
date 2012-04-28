@@ -66,9 +66,6 @@ function mainScreen ($screen) {
     }
 
     return {
-        ondisplay: ondisplay,
-        navigation: {
-            list: $listLink
-        }
+        ondisplay: ondisplay
     };
 }

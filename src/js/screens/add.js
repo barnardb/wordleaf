@@ -20,7 +20,9 @@ function addScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        deck.save(createCard($front.val(), $back.val()));
+        var card = createCard($front.val(), $back.val())
+        deck.save(card);
+        $feeback.text('Created ' + card.front);
         $inputs.val('');
         $inputs.first().focus();
     };
@@ -28,8 +30,6 @@ function addScreen($screen) {
     $addForm.submit(considerNewCardRequest);
 
     return {
-        navigation: {
-            main: $doneLink
-        }
+        ondisplay: function () { $feedback.text(null) }
     };
 }

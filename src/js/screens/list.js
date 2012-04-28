@@ -25,9 +25,6 @@ function listScreen($screen) {
     }
 
     return {
-        ondisplay: updateList,
-        navigation: {
-            add: $addLink
-        }
+        ondisplay: updateList
     };
 }

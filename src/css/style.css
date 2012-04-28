@@ -2,6 +2,13 @@ body {
     font-family: sans, sans-serif;
 }
 
+a {
+    margin: 0.5em;
+    display: block;
+    font-weight: bolder;
+    color: navy;
+}
+
 [lang='jp'] {
     font-family: serif;
 }
@@ -43,9 +50,5 @@ label + input {
     left: 7em;
     top: -2em;
     width: 20em;
-}
-
-#source {
-    width: 30em;
 }
 
