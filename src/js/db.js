@@ -6,7 +6,7 @@ if('indexedDB' in window) {
     indexedDB = mozIndexedDB;
 }
 
-var perform = function (request, callback) {
+function perform(request, callback) {
     request.onsuccess = function(evt) {
         callback(evt.target.result);
     };
@@ -16,7 +16,8 @@ var perform = function (request, callback) {
     };
 };
 
-var openDatabase = function(name, version, upgradeCallback, openCallback) {
+function openDatabase(name, version, upgradeCallback, openCallback) {
+    log.trace();
     var request = indexedDB.open(name, version);
     request.onupgradeneeded = function (evt) {
         upgradeCallback(evt.target.result);
@@ -39,32 +40,35 @@ var openDatabase = function(name, version, upgradeCallback, openCallback) {
     };
 };
 
-var openDeck = function (name, callback) {
+function openDeck(name, callback) {
+    log.trace();
     var database;
 
-    var getTransactionalStore = function (withWrite) {
+    function getTransactionalStore(withWrite) {
         var mode = withWrite ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
         return database.transaction(['Cards'], mode).objectStore('Cards');
     };
 
-    var performTransaction = function (action, callback) {
+    function performTransaction(action, callback) {
         var store = getTransactionalStore();
         perform(store[action](), function (result) {
             callback(result, store);
         });
     };
 
-    var getCardCount = function (callback) {
+    function getCardCount(callback) {
         performTransaction('count', callback);
     };
 
     var deck = {
         getSize: function (callback) {
+            log.trace();
             getCardCount(function (count) {
                 callback(count);
             });
         },
         forEachCard: function (callback) {
+            log.trace();
             performTransaction('openCursor', function(cursor) {
                 if(cursor && cursor.value) {
                     callback(cursor.value);
@@ -73,6 +77,7 @@ var openDeck = function (name, callback) {
             });
         },
         getRandomCard: function (callback) {
+            log.trace();
             getCardCount(function (count, store) {
                 perform(store.get(~~(Math.random() * count) + 1), callback);
             });
