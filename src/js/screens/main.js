@@ -1,8 +1,11 @@
-var mainScreen = function() {
-    var $screen = $('.main.screen'),
-        $card = $screen.find('.flashcard'),
+function mainScreen ($screen) {
+    var $card = $screen.find('.flashcard'),
         $response = $screen.find('.response'),
+        $listLink = $screen.find('a.list'),
         activeCard;
+
+    log.debug('$screen', $screen)
+    log.debug('$listLink', $listLink);
 
     function recordResponse(card, response) {
         log.trace();
@@ -51,13 +54,16 @@ var mainScreen = function() {
         log.trace();
         deck.getRandomCard(function (card) {
             activeCard = card
-            $card.text(card.de)
+            $card.text(card.prompt)
             $response.parent('form')[0].addEventListener('submit', processFirstResponse)
             $response.focus()
         })
     }
 
     return {
-        showNextCard: showNextCard
+        showNextCard: showNextCard,
+        navigation: {
+            list: $listLink
+        }
     };
-};
+}

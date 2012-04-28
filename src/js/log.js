@@ -3,8 +3,8 @@ var log = (function () {
     function getLineSignatureWebKit(depth) {
         try { throw Error('') } catch(err) {
             var caller_line = err.stack.split("\n")[3+depth];
-            var fields = /\s+at (.+) \((.+):(\d+)\)/.exec(caller_line);
-            return fields[2] + ' ' + fields[1];
+            var fields = /\s+at (?:(.+) \()?(.+):(\d+)\)?/.exec(caller_line);
+            return fields[2] + ' ' + (fields[1] || '(anon)');
         }
     }
 
@@ -12,7 +12,7 @@ var log = (function () {
         try { throw Error('') } catch(err) {
             var caller_line = err.stack.split("\n")[1+depth];
             var fields = /(.*)\((.*)\)@(.+)/.exec(caller_line);
-            return fields[3] + ' ' + fields[1];
+            return fields[3] + ' ' + (fields[1] || '(anon)');
         }
     }
 
@@ -26,8 +26,10 @@ var log = (function () {
         debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + inspect(rhs) + ' == ' + lhs + ') → ' + (rhs == lhs));
     }
 
-    function trace() {
-        console.debug('TRACE ' + getLineSignature(1));
+    function trace(callerArguments) {
+        var lineItems = ['TRACE ' + getLineSignature(1)]
+        callerArguments && (lineItems = lineItems.concat(Array.prototype.slice.call(callerArguments)))
+        console.debug.apply(console, lineItems)
     }
 
     return {
