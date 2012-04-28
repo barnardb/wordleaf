@@ -18,12 +18,20 @@ var log = (function () {
 
     var getLineSignature = navigator.userAgent.indexOf('WebKit') >= 0 ? getLineSignatureWebKit : getLineSignatureGecko;
 
+    function warn() {
+        console.warn.apply(console, ['WARN ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
+    }
+
+    function info() {
+        console.info.apply(console, ['INFO ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
+    }
+
     function debug() {
         console.debug.apply(console, ['DEBUG ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
     }
 
     function debugEquality(rhsRep, rhs, lhsRep, lhs) {
-        debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + inspect(rhs) + ' == ' + lhs + ') → ' + (rhs == lhs));
+        debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + rhs + ' == ' + lhs + ') → ' + (rhs == lhs));
     }
 
     function trace(callerArguments) {
@@ -33,6 +41,8 @@ var log = (function () {
     }
 
     return {
+        warn: warn,
+        info: info,
         debug: debug,
         debugEquality: debugEquality,
         trace: trace

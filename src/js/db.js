@@ -20,6 +20,7 @@ function openDatabase(name, version, upgradeCallback, openCallback) {
     log.trace();
     var request = indexedDB.open(name, version);
     request.onupgradeneeded = function (evt) {
+        log.debug('upgrade needed', evt);
         upgradeCallback(evt.target.result);
     };
     request.onsuccess = function (evt) {
@@ -27,9 +28,8 @@ function openDatabase(name, version, upgradeCallback, openCallback) {
         if (database.version == version) {
             openCallback(database);
         } else {
-            console.log('new creation event missing, setting version');
+            log.warn('Expected database version', version, 'but got undefined! You must be using WebKit, with an outtaded indexDB implemation. Using setVersion workaround.')
             perform(database.setVersion(version), function () {
-                console.log('success');
                 upgradeCallback(database);
                 openCallback(database);
             });
@@ -87,10 +87,17 @@ function openDeck(name, callback) {
         }
     };
 
-    openDatabase(name, 1, function(database) {
+    function updateDatabase(database) {
+        log.trace(arguments)
+        log.info('Initialising database', database.name)
         database.createObjectStore('Cards', { autoIncrement: true });
-    }, function(db) {
+    }
+
+    function onOpen(db) {
+        log.trace(arguments);
         database = db;
         callback(deck);
-    });
+    };
+
+    openDatabase(name, 1, updateDatabase, onOpen);
 };
