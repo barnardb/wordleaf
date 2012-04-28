@@ -5,7 +5,7 @@ function addScreen($screen) {
         $front = $inputs.filter('#front'),
         $back = $inputs.filter('#back'),
         $addForm = $back.parent('form'),
-        $doneLink = $screen.find('.done');
+        $feedback = $screen.find('.feedback');
 
     log.debug('$inputs', $inputs);
     log.debug('$front', $front);
@@ -22,7 +22,7 @@ function addScreen($screen) {
         }
         var card = createCard($front.val(), $back.val())
         deck.save(card);
-        $feeback.text('Created ' + card.front);
+        $feedback.text('Created ' + card.front);
         $inputs.val('');
         $inputs.first().focus();
     };
@@ -30,6 +30,6 @@ function addScreen($screen) {
     $addForm.submit(considerNewCardRequest);
 
     return {
-        ondisplay: function () { $feedback.text(null) }
+        ondisplay: function () { $feedback.text('') }
     };
 }
