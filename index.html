@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>Wordleaf</h1>
-        <div class="screen flash">
+        <div class="flash screen">
             <a class="list">View word list…</a>
             <div class="flashcard">
             </div>
@@ -16,15 +16,17 @@
                 <input type="text" class="response"/>
             </form>
         </div>
-        <div class="screen list">
+        <div class="list screen">
             <a class="flash">Back to flash screen…</a>
             <a class="add">Add new words…</a>
-            <h2>Words (<span class="wordCount"></span>)</h2>
-            <div class="listedword template">
-                <span class="front"></span>
-            </div>
+            <h2>Words (<span class="word count"></span>)</h2>
+            <ul class="word list">
+                <li class="template">
+                    <span class="front"></span>
+                </li>
+            </ul>
         </div>
-        <div class="screen add">
+        <div class="add screen">
             <a class="flash">Back to flash screen…</a>
             <a class="list">Back to word list…</a>
             <h2>Individual Cards</h2>
@@ -45,6 +47,7 @@
         <script type="application/javascript" src="src/js/db.js"></script>
         <script type="application/javascript" src="src/js/deck.js"></script>
         <script type="application/javascript" src="src/js/card.js"></script>
+        <script type="application/javascript" src="src/js/ui/list.js"></script>
         <script type="application/javascript" src="src/js/screens/flash.js"></script>
         <script type="application/javascript" src="src/js/screens/list.js"></script>
         <script type="application/javascript" src="src/js/screens/add.js"></script>
