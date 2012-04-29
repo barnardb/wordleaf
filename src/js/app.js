@@ -1,4 +1,4 @@
-var app = (function app() {
+function createApp() {
     var screenNames = ['flash', 'list', 'add'],
         screens,
         $screens = $('.screen');
@@ -31,4 +31,4 @@ var app = (function app() {
     return {
         displayScreen: displayScreen
     };
-})()
+}
