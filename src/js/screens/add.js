@@ -20,7 +20,7 @@ function addScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        var card = createCard($front.val(), $back.val())
+        var card = { front: $front.val(), back: $back.val() }
         deck.save(card);
         $feedback.text('Created ' + card.front);
         $inputs.val('');

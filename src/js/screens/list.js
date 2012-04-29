@@ -11,7 +11,7 @@ function listScreen($screen) {
     function addCardToList(card) {
         log.trace(arguments)
         $node = $template.clone().removeClass('template')
-        _.each($node.children(), function (field) { $(field).text(card[field.className]) })
+        _.each($node.children(), function (field) { $(field).html(card[field.className]) })
         $node.insertBefore($template)
     }
 
