@@ -64,7 +64,8 @@ function wrapDatabase(database) {
 
     return {
         getTransactionalStore: getTransactionalStore,
-        performWithStore: performWithStore
+        performWithStore: performWithStore,
+        get objectStoreNames() { return database.objectStoreNames }
     };
 }
 

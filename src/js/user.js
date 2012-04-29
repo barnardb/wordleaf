@@ -5,7 +5,14 @@ function createUser(database) {
         window.openDeck(database, name, callback)
     }
 
+    function forEachDeck(callback) {
+        _.each(database.objectStoreNames, function (name) {
+            callback({ name: name });
+        })
+    }
+
     return {
+        forEachDeck: forEachDeck,
         openDeck: openDeck
     };
 }

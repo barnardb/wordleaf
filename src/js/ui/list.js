@@ -1,4 +1,4 @@
-function uiList($scope, name, template) {
+function uiList($scope, name, template, events) {
     log.trace(arguments)
 
     var $classified = $scope.find('.' + name),
@@ -11,7 +11,11 @@ function uiList($scope, name, template) {
     log.debug('$list', $list);
 
     function addToList(item) {
-        $list.append(template(item))
+        $node = $(template(item))
+        events && _.each(events, function(handler, name) {
+            $node[name](handler);
+        })
+        $list.append($node)
         $count.text(count += 1);
     }
 

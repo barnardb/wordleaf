@@ -1,6 +1,7 @@
 function createApp() {
-    var screenNames = ['flash', 'list', 'add'],
+    var screenNames = ['top', 'flash', 'list', 'add'],
         screens,
+        currentUser,
         activeDeck,
         $screens = $('.screen');
 
@@ -27,18 +28,23 @@ function createApp() {
         screens[name] = screen;
     }
 
+    function activateDeck(name, callback) {
+        log.trace(arguments)
+        currentUser.openDeck('Cards', function (deck) {
+            callback(activeDeck = deck)
+        })
+    }
+
     screenNames.forEach(initialiseScreen);
     openUserDatabase('dev', function (user) {
-        log.debug('user database is open')
-        user.openDeck('Cards', function (deck) {
-            log.debug('deck is open')
-            activeDeck = deck
-            app.displayScreen(screenNames[0])
-        })
+        currentUser = user;
+        app.displayScreen(screenNames[0])
     });
 
     return {
         displayScreen: displayScreen,
+        activateDeck: activateDeck,
+        get currentUser() { return currentUser },
         get activeDeck() { return activeDeck }
     };
 }
