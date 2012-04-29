@@ -1,12 +1,7 @@
 var idbUtils = (function () {
 
-    if('indexedDB' in window) {
-    } else if('webkitIndexedDB' in window) {
-        indexedDB = webkitIndexedDB;
-        IDBTransaction = webkitIDBTransaction;
-    } else if('mozIndexedDB' in window) {
-        indexedDB = mozIndexedDB;
-    }
+    var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+    var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 
     function perform(request, callback) {
         request.onsuccess = function(evt) {
@@ -51,6 +46,7 @@ var idbUtils = (function () {
 function wrapDatabase(database) {
 
     function getTransactionalStore(name, writable) {
+        log.trace(arguments);
         var mode = writable ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
         return database.transaction([name], mode).objectStore(name);
     }
