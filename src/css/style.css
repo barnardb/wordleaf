@@ -56,3 +56,7 @@ label + input {
     width: 20em;
 }
 
+textarea {
+    width: 80em;
+    height: 20em;
+}
