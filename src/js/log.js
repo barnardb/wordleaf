@@ -31,7 +31,7 @@ var log = (function () {
     }
 
     function debugEquality(rhsRep, rhs, lhsRep, lhs) {
-        debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + rhs + ' == ' + lhs + ') → ' + (rhs == lhs));
+        debug('(' + rhsRep + ' == ' + lhsRep + ') → (' + JSON.stringify(rhs) + ' == ' + JSON.stringify(lhs) + ') → ' + (rhs == lhs));
     }
 
     function trace(callerArguments) {
