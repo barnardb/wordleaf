@@ -1,21 +1,8 @@
-function openDeck(name, callback) {
-    log.trace();
-    var database;
-
-    function getTransactionalStore(withWrite) {
-        var mode = withWrite ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
-        return database.transaction(['Cards'], mode).objectStore('Cards');
-    };
-
-    function performTransaction(action, callback) {
-        var store = getTransactionalStore();
-        perform(store[action](), function (result) {
-            callback(result, store);
-        });
-    };
+function openDeck(database, name, callback) {
+    log.trace(arguments);
 
     function getCardCount(callback) {
-        performTransaction('count', callback);
+        database.performWithStore(name, 'count', callback);
     };
 
     var deck = {
@@ -27,7 +14,7 @@ function openDeck(name, callback) {
         },
         forEachCard: function (callback) {
             log.trace();
-            performTransaction('openCursor', function(cursor) {
+            database.performWithStore(name, 'openCursor', function(cursor) {
                 if(cursor && cursor.value) {
                     callback(createCard(deck, cursor.value));
                     cursor.continue();
@@ -37,28 +24,13 @@ function openDeck(name, callback) {
         getRandomCard: function (callback) {
             log.trace();
             getCardCount(function (count, store) {
-                perform(store.get(~~(Math.random() * count) + 1), function(data) { callback(createCard(deck, data)) });
+                idbUtils.perform(store.get(~~(Math.random() * count) + 1), function(data) { callback(createCard(deck, data)) });
             });
         },
         save: function (card) {
-            getTransactionalStore(true).put(card);
+            database.getTransactionalStore(name, true).put(card);
         }
     };
 
-    function updateDatabase(database) {
-        log.trace(arguments)
-        log.info('Initialising database', database.name)
-        database.createObjectStore('Cards', {
-            keyPath: 'id',
-            autoIncrement: true
-        });
-    }
-
-    function onOpen(db) {
-        log.trace(arguments);
-        database = db;
-        callback(deck);
-    };
-
-    openDatabase(name, 1, updateDatabase, onOpen);
+    callback(deck);
 };

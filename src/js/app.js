@@ -28,10 +28,14 @@ function createApp() {
     }
 
     screenNames.forEach(initialiseScreen);
-    openDeck('dev', function (deck) {
-        activeDeck = deck
-        app.displayScreen(screenNames[0])
-    })
+    openUserDatabase('dev', function (user) {
+        log.debug('user database is open')
+        user.openDeck('Cards', function (deck) {
+            log.debug('deck is open')
+            activeDeck = deck
+            app.displayScreen(screenNames[0])
+        })
+    });
 
     return {
         displayScreen: displayScreen,
