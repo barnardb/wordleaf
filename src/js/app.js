@@ -1,5 +1,5 @@
 var app = (function app() {
-    var screenNames = ['main', 'list', 'add'],
+    var screenNames = ['flash', 'list', 'add'],
         screens,
         $screens = $('.screen');
 

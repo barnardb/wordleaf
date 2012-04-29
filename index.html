@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>Wordleaf</h1>
-        <div class="screen main">
+        <div class="screen flash">
             <a class="list">View word list…</a>
             <div class="flashcard">
             </div>
@@ -17,7 +17,7 @@
             </form>
         </div>
         <div class="screen list">
-            <a class="main">Back to main screen…</a>
+            <a class="flash">Back to flash screen…</a>
             <a class="add">Add new words…</a>
             <h2>Words (<span class="wordCount"></span>)</h2>
             <div class="listedword template">
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="screen add">
-            <a class="main">Back to main screen…</a>
+            <a class="flash">Back to flash screen…</a>
             <a class="list">Back to word list…</a>
             <h2>Individual Cards</h2>
             <label for="front">Front</label>
@@ -45,7 +45,7 @@
         <script type="application/javascript" src="src/js/db.js"></script>
         <script type="application/javascript" src="src/js/deck.js"></script>
         <script type="application/javascript" src="src/js/card.js"></script>
-        <script type="application/javascript" src="src/js/screens/main.js"></script>
+        <script type="application/javascript" src="src/js/screens/flash.js"></script>
         <script type="application/javascript" src="src/js/screens/list.js"></script>
         <script type="application/javascript" src="src/js/screens/add.js"></script>
         <script type="application/javascript" src="src/js/app.js"></script>
@@ -54,7 +54,7 @@
 
             openDeck('dev', function (opened) {
                 deck = opened
-                app.displayScreen('main')
+                app.displayScreen('flash')
             })
         </script>
     </body>

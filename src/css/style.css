@@ -44,7 +44,7 @@ a {
     display: none;
 }
 
-.screen.main {
+.screen:first-child {
     display: block;
 }
 
