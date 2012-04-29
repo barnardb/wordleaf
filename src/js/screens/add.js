@@ -21,7 +21,7 @@ function addScreen($screen) {
             return
         }
         var card = { front: $front.val(), back: $back.val() }
-        deck.save(card);
+        app.activeDeck.save(card);
         $feedback.text('Created ' + card.front);
         $inputs.val('');
         $inputs.first().focus();

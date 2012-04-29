@@ -1,4 +1,4 @@
-function createCard(data) {
+function createCard(deck, data) {
     log.trace(arguments);
 
     var front = data.front,

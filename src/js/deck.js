@@ -29,7 +29,7 @@ function openDeck(name, callback) {
             log.trace();
             performTransaction('openCursor', function(cursor) {
                 if(cursor && cursor.value) {
-                    callback(createCard(cursor.value));
+                    callback(createCard(deck, cursor.value));
                     cursor.continue();
                 }
             });
@@ -37,7 +37,7 @@ function openDeck(name, callback) {
         getRandomCard: function (callback) {
             log.trace();
             getCardCount(function (count, store) {
-                perform(store.get(~~(Math.random() * count) + 1), function(data) { callback(createCard(data)) });
+                perform(store.get(~~(Math.random() * count) + 1), function(data) { callback(createCard(deck, data)) });
             });
         },
         save: function (card) {

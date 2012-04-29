@@ -4,7 +4,8 @@ function uiList($scope, name) {
     var $classified = $scope.find('.' + name),
         $count = $classified.filter('.count'),
         $list = $classified.filter('.list'),
-        $template = $list.children('.template');
+        $template = $list.children('.template'),
+        count;
 
     log.debug('$classified', $classified);
     log.debug('$count', $count);
@@ -15,15 +16,16 @@ function uiList($scope, name) {
         $node = $template.clone().removeClass('template')
         _.each($node.children(), function (field) { $(field).html(item[field.className]) })
         $node.insertBefore($template)
+        count += 1
     }
 
     function update(iterator) {
         log.trace(arguments)
         $list.children().not($template).remove()
-        $count.length && deck.getSize(function (size) {
-            $count.text(size)
-        })
+        count = 0;
+        $count.text('…')
         iterator(addToList)
+        $count.text(count);
     }
 
     return {

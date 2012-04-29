@@ -1,6 +1,7 @@
 function createApp() {
     var screenNames = ['flash', 'list', 'add'],
         screens,
+        activeDeck,
         $screens = $('.screen');
 
     var screens = {};
@@ -27,8 +28,13 @@ function createApp() {
     }
 
     screenNames.forEach(initialiseScreen);
+    openDeck('dev', function (deck) {
+        activeDeck = deck
+        app.displayScreen(screenNames[0])
+    })
 
     return {
-        displayScreen: displayScreen
+        displayScreen: displayScreen,
+        get activeDeck() { return activeDeck }
     };
 }

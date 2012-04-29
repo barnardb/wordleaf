@@ -4,6 +4,6 @@ function listScreen($screen) {
     var wordList = uiList($screen, 'word');
 
     return {
-        ondisplay: function() { wordList.update(deck.forEachCard) }
+        ondisplay: function() { wordList.update(app.activeDeck.forEachCard) }
     };
 }

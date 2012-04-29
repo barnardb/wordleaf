@@ -53,13 +53,9 @@
         <script type="application/javascript" src="src/js/screens/add.js"></script>
         <script type="application/javascript" src="src/js/app.js"></script>
         <script type="application/javascript">
-            var app = createApp();
-            var deck = null;
-
-            openDeck('dev', function (opened) {
-                deck = opened
+            var app = createApp(function (app) {
                 app.displayScreen('flash')
-            })
+            });
         </script>
     </body>
 </html>
