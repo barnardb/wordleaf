@@ -16,16 +16,14 @@ function uiList($scope, name) {
         $node = $template.clone().removeClass('template')
         _.each($node.children(), function (field) { $(field).html(item[field.className]) })
         $node.insertBefore($template)
-        count += 1
+        $count.text(count += 1);
     }
 
     function update(iterator) {
         log.trace(arguments)
         $list.children().not($template).remove()
-        count = 0;
-        $count.text('…')
+        $count.text(count = 0)
         iterator(addToList)
-        $count.text(count);
     }
 
     return {
