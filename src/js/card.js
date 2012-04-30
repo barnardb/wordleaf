@@ -1,4 +1,4 @@
-function createCard(deck, data) {
+function Card(deck, data) {
     log.trace(arguments);
 
     var front = data.front,
@@ -15,24 +15,29 @@ function createCard(deck, data) {
 
     function evaluateResponse(response, callback) {
         log.trace();
-        var isCorrect = isValidResponse(response)
-        data.responses || (data.responses = [])
-        data.responses.push({
-        //(data.responses || (data.responses = [])).push({
+        var isCorrect = isValidResponse(response);
+        (data.responses || (data.responses = [])).push({
             time: new Date().getTime(),
             prompt: front,
             response: response,
             expected: getExpectedResponse(),
             interpretation: isCorrect
         })
-        deck.save(data)
+        save()
         callback(isCorrect, back)
     }
 
+    function save() {
+        deck.database.getTransactionalStore('Cards', true).put(data);
+    }
+
+    data.deck = deck.id
+
     return {
-        front: front,
         back: back,
+        front: front,
         evaluateResponse: evaluateResponse,
         isValidResponse: isValidResponse,
+        save: save
     };
 }

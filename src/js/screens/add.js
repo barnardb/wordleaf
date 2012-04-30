@@ -20,8 +20,8 @@ function addScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        var card = { front: $front.val(), back: $back.val() }
-        app.activeDeck.save(card);
+        var card = new Card(app.activeDeck, { front: $front.val(), back: $back.val() })
+        card.save();
         $feedback.text('Created ' + card.front);
         $inputs.val('');
         $inputs.first().focus();

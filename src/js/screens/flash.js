@@ -38,8 +38,13 @@ function flashScreen ($screen) {
     };
 
     function showNextCard() {
-        log.trace();
+        log.trace(arguments);
+        log.debug('app.activeDeck', app.activeDeck)
         app.activeDeck.getRandomCard(function (card) {
+            if(!card) {
+                app.displayScreen('list');
+                return;
+            }
             activeCard = card
             $card.html(card.front)
             $response.parent('form')[0].addEventListener('submit', processFirstResponse)

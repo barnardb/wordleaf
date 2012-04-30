@@ -1,19 +1,28 @@
-function createUser(database) {
+function User(database) {
     log.trace(arguments)
 
-    function openDeck(name, callback) {
-        window.openDeck(database, name, callback)
+    function forEachDeck(callback) {
+        log.trace(arguments);
+        database.forEachValueInStore('Decks', function(data) {
+            callback(new Deck(data, database));
+        });
     }
 
-    function forEachDeck(callback) {
-        _.each(database.objectStoreNames, function (name) {
-            callback({ name: name });
+    function openDeck(name, callback) {
+        Deck.getFromDatabase(database, name, callback);
+    }
+
+    function createDeck(data, callback) {
+        log.trace(arguments);
+        idbUtils.perform(database.getTransactionalStore('Decks', true).add(data), function () {
+            callback(new Deck(data, database));
         })
     }
 
     return {
         forEachDeck: forEachDeck,
-        openDeck: openDeck
+        openDeck: openDeck,
+        createDeck: createDeck
     };
 }
 
@@ -22,16 +31,22 @@ function openUserDatabase(name, callback) {
 
     function updateDatabase(database) {
         log.trace(arguments)
-        log.info('Initialising database', database.name)
-        database.createObjectStore('Cards', {
+        log.info('Initialising database for user', database.name)
+
+        var autoIncrementedId = {
             keyPath: 'id',
             autoIncrement: true
-        });
+        };
+
+        database.createObjectStore('Decks', autoIncrementedId);
+
+        database.createObjectStore('Cards', autoIncrementedId)
+            .createIndex('deck', 'deck');
     }
 
     function onOpen(database) {
         log.trace(arguments)
-        callback(createUser(database));
+        callback(new User(database));
     };
 
     idbUtils.openDatabase(name, 1, updateDatabase, onOpen);

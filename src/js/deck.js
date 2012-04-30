@@ -1,36 +1,54 @@
-function openDeck(database, name, callback) {
+function Deck(data, database) {
     log.trace(arguments);
 
+    var deck;
+
+    function forEachCard(callback) {
+        log.trace(arguments);
+        idbUtils.perform(database.getTransactionalStore('Cards').index('deck').openCursor(data.id), function(cursor) {
+            if(cursor && cursor.value) {
+                callback(new Card(deck, cursor.value));
+                cursor.continue();
+            }
+        });
+    }
+
     function getCardCount(callback) {
-        database.performWithStore(name, 'count', callback);
+        log.trace(arguments);
+        var store = database.getTransactionalStore('Cards'),
+            index = store.index('deck');
+        idbUtils.perform(index.count(data.id), function (count) {
+            callback(count, index);
+        })
     };
 
-    var deck = {
-        getSize: function (callback) {
-            log.trace();
-            getCardCount(function (count) {
-                callback(count);
-            });
-        },
-        forEachCard: function (callback) {
-            log.trace();
-            database.performWithStore(name, 'openCursor', function(cursor) {
-                if(cursor && cursor.value) {
-                    callback(createCard(deck, cursor.value));
-                    cursor.continue();
-                }
-            });
-        },
-        getRandomCard: function (callback) {
-            log.trace();
-            getCardCount(function (count, store) {
-                idbUtils.perform(store.get(~~(Math.random() * count) + 1), function(data) { callback(createCard(deck, data)) });
-            });
-        },
-        save: function (card) {
-            database.getTransactionalStore(name, true).put(card);
-        }
-    };
+    function getRandomCard(callback) {
+        log.trace();
+        getCardCount(function (count, index) {
+            if(count) {
+                var firstHit = true;
+                idbUtils.perform(index.openCursor(data.id), function(cursor) {
+                    if(firstHit) {
+                        var toMove = ~~(Math.random() * count);
+                        if(toMove) {
+                            cursor.advance(toMove);
+                            firstHit = false;
+                            return;
+                        }
+                    }
+                    callback(new Card(deck, cursor.value))
+                })
+            } else {
+                callback();
+            }
+        });
+    }
 
-    callback(deck);
+    return deck = {
+        forEachCard: forEachCard,
+        getRandomCard: getRandomCard,
+        get id() { return data.id },
+        get name() { return data.name },
+        database: database
+    };
 };

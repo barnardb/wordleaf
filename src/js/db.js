@@ -1,7 +1,7 @@
+    var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 var idbUtils = (function () {
 
     var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-    var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
 
     function perform(request, callback) {
         request.onsuccess = function(evt) {
@@ -25,7 +25,7 @@ var idbUtils = (function () {
             if (database.version == version) {
                 openCallback(wrapDatabase(database));
             } else {
-                log.warn('Expected database version', version, 'but got undefined! You must be using WebKit, with an outtaded indexDB implemation. Using setVersion workaround.')
+                log.warn('Expected database version', version, 'but got undefined! You must be using WebKit, with an outdated indexDB implemation. Using setVersion workaround.')
                 perform(database.setVersion(version), function () {
                     upgradeCallback(database);
                     openCallback(wrapDatabase(database));
@@ -58,9 +58,21 @@ function wrapDatabase(database) {
         });
     };
 
+    function forEachValueInStore(name, callback) {
+        log.trace(arguments);
+        performWithStore(name, 'openCursor', function(cursor) {
+            if(cursor && cursor.value) {
+                callback(cursor.value);
+                cursor.continue();
+            }
+        });
+    }
+
     return {
+        transaction: function () { return database.transaction.apply(database, arguments) },
         getTransactionalStore: getTransactionalStore,
         performWithStore: performWithStore,
+        forEachValueInStore: forEachValueInStore,
         get objectStoreNames() { return database.objectStoreNames }
     };
 }

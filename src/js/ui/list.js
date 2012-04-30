@@ -13,7 +13,7 @@ function uiList($scope, name, template, events) {
     function addToList(item) {
         $node = $(template(item))
         events && _.each(events, function(handler, name) {
-            $node[name](handler);
+            $node[name](function() { handler(item) });
         })
         $list.append($node)
         $count.text(count += 1);
