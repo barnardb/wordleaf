@@ -1,11 +1,8 @@
 function Card(deck, data) {
     log.trace(arguments);
 
-    var front = data.front,
-        back = data.back;
-
     function getExpectedResponse() {
-        return back.split('\n')[0].replace(/\<[^>]+\>/g, ' ').replace(/\s+/g, ' ').trim();
+        return data.back.split('\n')[0].replace(/\<[^>]+\>/g, ' ').replace(/\s+/g, ' ').trim();
     }
 
     function isValidResponse(response) {
@@ -18,13 +15,13 @@ function Card(deck, data) {
         var isCorrect = isValidResponse(response);
         (data.responses || (data.responses = [])).push({
             time: new Date().getTime(),
-            prompt: front,
+            prompt: data.front,
             response: response,
             expected: getExpectedResponse(),
             interpretation: isCorrect
         })
         save()
-        callback(isCorrect, back)
+        callback(isCorrect, data.back)
     }
 
     function save() {
@@ -34,8 +31,8 @@ function Card(deck, data) {
     data.deck = deck.id
 
     return {
-        back: back,
-        front: front,
+        get back() { return data.back },
+        get front() { return data.front },
         evaluateResponse: evaluateResponse,
         isValidResponse: isValidResponse,
         save: save
