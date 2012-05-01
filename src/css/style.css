@@ -70,11 +70,6 @@ input {
 }
 
 
-.add.screen .bulk textarea {
-    width: 60em;
-    height: 20em;
-}
-
 .add.screen .side:after {
     content: '.';
     display: block;
@@ -88,4 +83,10 @@ input {
 }
 .add.screen .side > div + div {
     margin-left: 2em;
-};
+}
+
+
+.import.screen textarea {
+    width: 60em;
+    height: 20em;
+}

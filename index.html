@@ -30,6 +30,7 @@
             <h2>Manage Deck: <span class="deck name"></span></h2>
             <a class="flash">Back to flash screen…</a>
             <a class="add">Add new words…</a>
+            <a class="import">Bulk import cards…</a>
             <h3>Words (<span class="word count"></span>)</h3>
             <ul class="word list"></ul>
         </div>
@@ -61,11 +62,14 @@
                 <button class="create">Create</button>
             </form>
             <div class="feedback"></div>
-            <div class="bulk">
-                <h2>In Bulk</h2>
-                <p>Yummies please! <button class='import'>Import</button></p>
-                <textarea></textarea>
-            </div>
+        </div>
+        <div class="import screen">
+            <h2>Bulk Import</h2>
+            <p>
+                <label for="importData">Yummies please!</label>
+                <button class="import">Import</button>
+            </p>
+            <textarea id="importData"></textarea>
         </div>
         <script type="application/javascript" src="lib/jquery-1.7.2.js"></script>
         <script type="application/javascript" src="lib/underscore-1.3.3.js"></script>
@@ -79,6 +83,7 @@
         <script type="application/javascript" src="src/js/screens/flash.js"></script>
         <script type="application/javascript" src="src/js/screens/deckScreen.js"></script>
         <script type="application/javascript" src="src/js/screens/add.js"></script>
+        <script type="application/javascript" src="src/js/screens/importScreen.js"></script>
         <script type="application/javascript" src="src/js/app.js"></script>
         <script type="application/javascript">
             var app = createApp(function (app) {
