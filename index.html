@@ -36,17 +36,35 @@
             <a class="flash">Back to flash screen…</a>
             <a class="list">Back to word list…</a>
             <h2>Individual Cards</h2>
-            <label for="front">Front</label>
-            <input type="text" id="front"/>
             <form>
-                <label for="back">Back</label>
-                <input type="text" id="back"/>
+                <div class="side">
+                    <label for="front"><h3>Front</h3></label>
+                    <div class="display">
+                        <textarea id="front"/></textarea>
+                    </div>
+                    <div class="answers">
+                        <label for="frontAnswer">Accepts</label>
+                        <input type="text" id="frontAnswer"/>
+                    </div>
+                </div>
+                <div class="side">
+                    <label for="back"><h3>Back</h3></label>
+                    <div class="display">
+                        <textarea id="back"/></textarea>
+                    </div>
+                    <div class="answers">
+                        <label for="backAnswer">Accepts</label>
+                        <input type="text" id="backAnswer"/>
+                    </div>
+                </div>
                 <button class="create">Create</button>
             </form>
             <div class="feedback"></div>
-            <h2>In Bulk</h2>
-            <p>Yummies please! <button class='import'>Import</button></p>
-            <textarea></textarea>
+            <div class="bulk">
+                <h2>In Bulk</h2>
+                <p>Yummies please! <button class='import'>Import</button></p>
+                <textarea></textarea>
+            </div>
         </div>
         <script type="application/javascript" src="lib/jquery-1.7.2.js"></script>
         <script type="application/javascript" src="lib/underscore-1.3.3.js"></script>

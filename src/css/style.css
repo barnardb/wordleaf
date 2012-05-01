@@ -48,15 +48,44 @@ a {
     display: block;
 }
 
-label + input {
+textarea {
     display: block;
-    position: relative;
-    left: 7em;
-    top: -2em;
+    width: 30em;
+    height: 5em;
+}
+
+input {
+    display: inline-block;
     width: 20em;
 }
 
-textarea {
-    width: 80em;
+.top.screen label {
+    display: block;
+}
+
+.top.screen .title {
+    display: inline-block;
+    font-weight: bolder;
+    width: 7em;
+}
+
+
+.add.screen .bulk textarea {
+    width: 60em;
     height: 20em;
 }
+
+.add.sreen .side:after {
+    content: '.';
+    display: block;
+    clear: both;
+    height: 0;
+    visibility: hidden;
+}
+
+.add.screen .side > div {
+    float: left;
+}
+.add.screen .side > div + div {
+    margin-left: 2em;
+};
