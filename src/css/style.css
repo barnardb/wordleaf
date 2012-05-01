@@ -75,7 +75,7 @@ input {
     height: 20em;
 }
 
-.add.sreen .side:after {
+.add.screen .side:after {
     content: '.';
     display: block;
     clear: both;
