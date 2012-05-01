@@ -1,9 +1,16 @@
 function deckScreen($screen) {
     log.trace(arguments)
-    var template = _.template('<li><%= front %></li>'),
+
+    var $deckName = $screen.find('.deck.name'),
+        template = _.template('<li><%= front %></li>'),
         wordList = uiList($screen, 'word', template);
 
+    function ondisplay() {
+        $deckName.text(app.activeDeck.name)
+        wordList.update(app.activeDeck.forEachCard)
+    }
+
     return {
-        ondisplay: function() { wordList.update(app.activeDeck.forEachCard) }
+        ondisplay: ondisplay
     };
 }
