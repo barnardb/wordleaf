@@ -23,7 +23,7 @@ function topScreen($screen) {
         evt.preventDefault();
         app.activeUser.createDeck({ name: $deckName.val() }, function(deck) {
             app.activeDeck = deck
-            app.displayScreen('list')
+            app.displayScreen('deck')
         })
     }
 

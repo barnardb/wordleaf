@@ -1,5 +1,5 @@
 function createApp() {
-    var screenNames = ['top', 'flash', 'list', 'add'],
+    var screenNames = ['top', 'flash', 'deck', 'add'],
         screens,
         activeUser,
         activeDeck,
