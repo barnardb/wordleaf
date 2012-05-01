@@ -42,7 +42,7 @@ function flashScreen ($screen) {
         log.debug('app.activeDeck', app.activeDeck)
         app.activeDeck.getRandomCard(function (card) {
             if(!card) {
-                app.displayScreen('list');
+                app.displayScreen('add');
                 return;
             }
             activeCard = card
