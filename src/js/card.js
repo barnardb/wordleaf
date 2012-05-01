@@ -1,13 +1,9 @@
 function Card(deck, data) {
     log.trace(arguments);
 
-    function getExpectedResponse() {
-        return data.back.split('\n')[0].replace(/\<[^>]+\>/g, ' ').replace(/\s+/g, ' ').trim();
-    }
-
     function isValidResponse(response) {
-        log.debugEquality('response.trim()', response.trim(), 'getExpectedResponse()', getExpectedResponse());
-        return response.trim() == getExpectedResponse();
+        log.debugEquality('response.trim()', response.trim(), 'data.backExpected', data.backExpected)
+        return response.trim() == data.backExpected
     }
 
     function evaluateResponse(response, callback) {
@@ -17,7 +13,7 @@ function Card(deck, data) {
             time: new Date().getTime(),
             prompt: data.front,
             response: response,
-            expected: getExpectedResponse(),
+            expected: data.backExpected,
             interpretation: isCorrect
         })
         save()

@@ -1,16 +1,36 @@
 function addScreen($screen) {
     log.trace(arguments)
 
-    var $inputs = $screen.find('input');
-        $front = $inputs.filter('#front'),
-        $back = $inputs.filter('#back'),
-        $addForm = $back.parent('form'),
+    var $cardFaces = $screen.find('.side textarea', $screen),
+        $inputs = $screen.find('input').add($cardFaces),
+        $front = $cardFaces.filter('#front'),
+        $frontAcceptable = $inputs.filter('#frontAcceptableInput'),
+        $back = $cardFaces.filter('#back'),
+        $backAcceptable = $inputs.filter('#backAcceptableInput'),
+        $addForm = $back.closest('form'),
         $feedback = $screen.find('.feedback');
 
     log.debug('$inputs', $inputs);
     log.debug('$front', $front);
     log.debug('$back', $back);
     log.debug('$addForm', $addForm);
+
+    function extractAcceptableResponse(html) {
+        return html.split('\n')[0].replace(/\<[^>]+\>/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+
+    function updateAcceptableAnswers(evt) {
+        log.trace(arguments)
+
+        var $face = $(this),
+            $acceptable = $face.closest('.side').find('.acceptableInput');
+
+        log.debug('$face', $face);
+        log.debug('$acceptable', $acceptable);
+
+        var calculatedAcceptable = extractAcceptableResponse($face.val());
+        $acceptable.val(calculatedAcceptable);
+    }
 
     function considerNewCardRequest(evt) {
         log.trace(arguments)
@@ -20,13 +40,19 @@ function addScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        var card = new Card(app.activeDeck, { front: $front.val(), back: $back.val() })
+        var card = new Card(app.activeDeck, {
+            front: $front.val(),
+            frontExpected: $frontAcceptable.val(),
+            back: $back.val(),
+            backExpected: $backAcceptable.val()
+        })
         card.save();
         $feedback.text('Created ' + card.front);
         $inputs.val('');
         $inputs.first().focus();
     };
 
+    $cardFaces.on('input', updateAcceptableAnswers)
     $addForm.submit(considerNewCardRequest);
 
     return {
