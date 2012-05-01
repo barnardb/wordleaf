@@ -16,7 +16,7 @@ function addScreen($screen) {
     log.debug('$addForm', $addForm);
 
     function extractAcceptableResponse(html) {
-        return html.split('\n')[0].replace(/\<[^>]+\>/g, ' ').replace(/\s+/g, ' ').trim();
+        return htmlUtils.extractText(html.split('\n')[0]);
     }
 
     function updateAcceptableAnswers(evt) {
