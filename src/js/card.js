@@ -25,7 +25,9 @@ function Card(deck, data) {
     }
 
     function save() {
-        deck.database.getTransactionalStore('Cards', true).put(data);
+        idbUtils.perform(deck.database.getTransactionalStore('Cards', true).put(data), function(id) {
+            data.id = id;
+        });
     }
 
     data.deck = deck.id

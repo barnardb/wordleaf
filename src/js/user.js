@@ -14,7 +14,8 @@ function User(database) {
 
     function createDeck(data, callback) {
         log.trace(arguments);
-        idbUtils.perform(database.getTransactionalStore('Decks', true).add(data), function () {
+        idbUtils.perform(database.getTransactionalStore('Decks', true).add(data), function (id) {
+            data.id = id;
             callback(new Deck(data, database));
         })
     }
