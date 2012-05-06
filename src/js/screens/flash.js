@@ -40,7 +40,7 @@ function flashScreen ($screen) {
     function showNextCard() {
         log.trace(arguments);
         log.debug('app.activeDeck', app.activeDeck)
-        app.activeDeck.getRandomCard(function (card) {
+        app.activeDeck.getNextCard(function (card) {
             if(!card) {
                 app.displayScreen('add');
                 return;

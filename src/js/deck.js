@@ -46,7 +46,7 @@ function Deck(data, database) {
 
     return deck = {
         forEachCard: forEachCard,
-        getRandomCard: getRandomCard,
+        getNextCard: getRandomCard,
         get id() { return data.id },
         get name() { return data.name },
         database: database
