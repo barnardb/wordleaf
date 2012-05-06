@@ -41,8 +41,9 @@ function openUserDatabase(name, callback) {
 
         database.createObjectStore('Decks', autoIncrementedId);
 
-        database.createObjectStore('Cards', autoIncrementedId)
-            .createIndex('deck', 'deck');
+        var cards = database.createObjectStore('Cards', autoIncrementedId);
+        cards.createIndex('deck', 'deck')
+        cards.createIndex('deck_nextScheduledFor', ['deck', 'nextScheduledFor']);
     }
 
     function onOpen(database) {

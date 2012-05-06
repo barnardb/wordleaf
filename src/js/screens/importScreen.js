@@ -21,7 +21,8 @@ function importScreen($screen) {
                 front: fields[0].trim(),
                 frontExpected: htmlUtils.extractText(fields[0]),
                 back: fields[1].trim(),
-                backExpected: htmlUtils.extractText(fields[1])
+                backExpected: htmlUtils.extractText(fields[1]),
+                nextScheduledFor: Time.now()
             }).save()
         })
         app.displayScreen('deck');

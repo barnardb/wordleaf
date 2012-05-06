@@ -2,7 +2,7 @@ function deckScreen($screen) {
     log.trace(arguments)
 
     var $deckName = $screen.find('.deck.name'),
-        template = _.template('<li><%= front %></li>'),
+        template = _.template('<li><%= front %> (<%= new Date(nextScheduledFor) %>)</li>'),
         wordList = uiList($screen, 'word', template);
 
     function ondisplay() {

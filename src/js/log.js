@@ -18,6 +18,10 @@ var log = (function () {
 
     var getLineSignature = navigator.userAgent.indexOf('WebKit') >= 0 ? getLineSignatureWebKit : getLineSignatureGecko;
 
+    function error() {
+        console.error.apply(console, ['ERROR ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
+    }
+
     function warn() {
         console.warn.apply(console, ['WARN ' + getLineSignature(1)].concat(Array.prototype.slice.call(arguments)));
     }
@@ -41,6 +45,7 @@ var log = (function () {
     }
 
     return {
+        error: error,
         warn: warn,
         info: info,
         debug: debug,

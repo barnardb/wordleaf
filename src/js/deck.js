@@ -22,31 +22,18 @@ function Deck(data, database) {
         })
     };
 
-    function getRandomCard(callback) {
-        log.trace();
-        getCardCount(function (count, index) {
-            if(count) {
-                var firstHit = true;
-                idbUtils.perform(index.openCursor(data.id), function(cursor) {
-                    if(firstHit) {
-                        var toMove = ~~(Math.random() * count);
-                        if(toMove) {
-                            cursor.advance(toMove);
-                            firstHit = false;
-                            return;
-                        }
-                    }
-                    callback(new Card(deck, cursor.value))
-                })
-            } else {
-                callback();
-            }
+    function getNextCard(callback) {
+        log.trace(arguments);
+        var store = database.getTransactionalStore('Cards'),
+            index = store.index('deck_nextScheduledFor');
+        idbUtils.perform(index.get(IDBKeyRange.bound([data.id], [data.id, Date.now()])), function (value) {
+            callback(value ? new Card(deck, value) : value);
         });
     }
 
     return deck = {
         forEachCard: forEachCard,
-        getNextCard: getRandomCard,
+        getNextCard: getNextCard,
         get id() { return data.id },
         get name() { return data.name },
         database: database

@@ -41,11 +41,11 @@ function flashScreen ($screen) {
         log.trace(arguments);
         log.debug('app.activeDeck', app.activeDeck)
         app.activeDeck.getNextCard(function (card) {
+            activeCard = card
             if(!card) {
                 app.displayScreen('add');
                 return;
             }
-            activeCard = card
             $card.html(card.front)
             $response.parent('form')[0].addEventListener('submit', processFirstResponse)
             $response.focus()
