@@ -1,19 +1,19 @@
 function addScreen($screen) {
     log.trace(arguments)
 
-    var $cardFaces = $screen.find('.side textarea', $screen),
-        $inputs = $screen.find('input').add($cardFaces),
-        $front = $cardFaces.filter('#front'),
-        $frontAcceptable = $inputs.filter('#frontAcceptableInput'),
-        $back = $cardFaces.filter('#back'),
-        $backAcceptable = $inputs.filter('#backAcceptableInput'),
-        $addForm = $back.closest('form'),
-        $feedback = $screen.find('.feedback');
+    var $form = $screen.find('form'),
+        $feedback = $screen.find('.feedback'),
+        $cardFaces,
+        $inputs,
+        $front,
+        $frontAcceptable,
+        $back,
+        $backAcceptable;
 
     log.debug('$inputs', $inputs);
     log.debug('$front', $front);
     log.debug('$back', $back);
-    log.debug('$addForm', $addForm);
+    log.debug('$form', $form);
 
     function extractAcceptableResponse(html) {
         return htmlUtils.extractText(html.split('\n')[0]);
@@ -52,10 +52,25 @@ function addScreen($screen) {
         $inputs.first().focus();
     };
 
-    $cardFaces.on('input', updateAcceptableAnswers)
-    $addForm.submit(considerNewCardRequest);
+    function ondisplay() {
+        log.trace(arguments);
+        $feedback.text('');
+
+        $form.html(app.activeDeck.cardEditTemplate());
+
+        $cardFaces = $screen.find('.side textarea', $screen);
+        $inputs = $screen.find('input').add($cardFaces);
+        $front = $cardFaces.filter('#front');
+        $frontAcceptable = $inputs.filter('#frontAcceptableInput');
+        $back = $cardFaces.filter('#back');
+        $backAcceptable = $inputs.filter('#backAcceptableInput');
+
+        $cardFaces.on('input', updateAcceptableAnswers)
+    }
+
+    $form.submit(considerNewCardRequest);
 
     return {
-        ondisplay: function () { $feedback.text('') }
+        ondisplay: ondisplay
     };
 }

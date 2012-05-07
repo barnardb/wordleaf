@@ -1,7 +1,29 @@
 function Deck(data, database) {
     log.trace(arguments);
 
-    var deck;
+    var deck,
+        cardEditTemplate = _.template('' +
+                '<div class="side">' +
+                '    <label for="front"><h3>Front</h3></label>' +
+                '    <div class="display">' +
+                '        <textarea id="front"/></textarea>' +
+                '    </div>' +
+                '    <div class="acceptableInputs">' +
+                '        <label for="frontAcceptableInput">Accepts</label>' +
+                '        <input type="text" id="frontAcceptableInput" class="acceptableInput"/>' +
+                '   </div>' +
+                '</div>' +
+                '<div class="side">' +
+                '    <label for="back"><h3>Back</h3></label>' +
+                '    <div class="display">' +
+                '        <textarea id="back"/></textarea>' +
+                '    </div>' +
+                '    <div class="acceptableInputs">' +
+                '        <label for="backAcceptableInput">Accepts</label>' +
+                '        <input type="text" id="backAcceptableInput" class="acceptableInput"/>' +
+                '    </div>' +
+                '</div>' +
+                '<button class="create">Create</button>');
 
     function forEachCard(callback) {
         log.trace(arguments);
@@ -36,6 +58,7 @@ function Deck(data, database) {
         getNextCard: getNextCard,
         get id() { return data.id },
         get name() { return data.name },
-        database: database
+        database: database,
+        cardEditTemplate: cardEditTemplate
     };
 };
