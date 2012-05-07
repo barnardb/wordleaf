@@ -11,7 +11,7 @@ var log = (function () {
     function getLineSignatureGecko(depth) {
         try { throw Error('') } catch(err) {
             var caller_line = err.stack.split("\n")[1+depth];
-            var fields = /([^()]*)(:?\(([^)]*)\))?@(.+)/.exec(caller_line);
+            var fields = /([^()]*)(?:\(([^)]*)\))?@(.+)/.exec(caller_line);
             return fields[3] + ' ' + (fields[1] || '(anon)');
         }
     }
