@@ -8,7 +8,8 @@ function addScreen($screen) {
         $front,
         $frontAcceptable,
         $back,
-        $backAcceptable;
+        $backAcceptable,
+        activeCard;
 
     log.debug('$inputs', $inputs);
     log.debug('$front', $front);
@@ -40,23 +41,25 @@ function addScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        var card = new Card(app.activeDeck, {
+        _.extend(activeCard, {
             front: $front.val(),
             frontExpected: $frontAcceptable.val(),
             back: $back.val(),
             backExpected: $backAcceptable.val()
         })
-        card.save();
-        $feedback.text('Created ' + card.front);
+        activeCard.created || (activeCard = new Card(app.activeDeck, activeCard));
+        activeCard.save();
+        $feedback.text('Created ' + activeCard.front);
         $inputs.val('');
         $inputs.first().focus();
     };
 
-    function ondisplay() {
+    function ondisplay(card) {
         log.trace(arguments);
         $feedback.text('');
 
-        $form.html(app.activeDeck.cardEditTemplate());
+        activeCard = card || {};
+        $form.html(app.activeDeck.cardEditTemplate(card));
 
         $cardFaces = $screen.find('.side textarea', $screen);
         $inputs = $screen.find('input').add($cardFaces);
