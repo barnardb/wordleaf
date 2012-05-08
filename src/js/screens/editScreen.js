@@ -1,4 +1,4 @@
-function addScreen($screen) {
+function editScreen($screen) {
     log.trace(arguments)
 
     var $form = $screen.find('form'),

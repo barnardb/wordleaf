@@ -70,7 +70,7 @@ input {
 }
 
 
-.add.screen .side:after {
+.edit.screen .side:after {
     content: '.';
     display: block;
     clear: both;
@@ -78,10 +78,10 @@ input {
     visibility: hidden;
 }
 
-.add.screen .side > div {
+.edit.screen .side > div {
     float: left;
 }
-.add.screen .side > div + div {
+.edit.screen .side > div + div {
     margin-left: 2em;
 }
 

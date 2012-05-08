@@ -43,7 +43,7 @@ function flashScreen ($screen) {
         app.activeDeck.getNextCard(function (card) {
             activeCard = card
             if(!card) {
-                app.displayScreen('add');
+                app.displayScreen('edit');
                 return;
             }
             $card.html(card.front)
