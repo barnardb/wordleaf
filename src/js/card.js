@@ -8,7 +8,8 @@ function Card(deck, data) {
 
     function calculateNewDelay(now, isCorrect) {
         var lastSeen = data.lastAnswered || data.created,
-            normalisedDelay = Math.sqrt(now - lastSeen / data.scheduledDelay);
+            actualDelay = now - lastSeen,
+            normalisedDelay = Math.sqrt(actualDelay / data.scheduledDelay) * data.scheduledDelay;
 
         log.debug('lastSeen', lastSeen);
         log.debug('now - lastSeen', now - lastSeen);
