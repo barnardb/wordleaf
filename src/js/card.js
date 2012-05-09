@@ -17,7 +17,7 @@ function Card(deck, data) {
         log.debug('normalisedDelay', normalisedDelay);
 
         if(isCorrect) {
-            return data.scheduledDelay + normalisedDelay;
+            return 2 * normalisedDelay;
         } else {
             return Math.min(normalisedDelay / 2, data.scheduledDelay);
         }
@@ -54,7 +54,7 @@ function Card(deck, data) {
     data.deck = deck.id;
     if(!data.created) {
         data.created = Date.now();
-        data.scheduledDelay = 2 * 60 * 1000;
+        data.scheduledDelay = 60 * 60 * 1000;
         data.nextScheduledFor = data.created + data.scheduledDelay;
     }
     console.debug('data.nextScheduledFor', data.nextScheduledFor);
