@@ -41,17 +41,22 @@ function editScreen($screen) {
             $(firstBlankInput).focus()
             return
         }
-        _.extend(activeCard, {
+        var data = {
             front: $front.val(),
             frontExpected: $frontAcceptable.val(),
             back: $back.val(),
             backExpected: $backAcceptable.val()
-        })
-        activeCard.created || (activeCard = new Card(app.activeDeck, activeCard));
-        activeCard.save();
-        $feedback.text('Created ' + activeCard.front);
-        $inputs.val('');
-        $inputs.first().focus();
+        };
+        if (activeCard.created) {
+            _.extend(activeCard.data, data);
+            activeCard.save();
+            app.displayScreen('flash');
+        } else {
+            activeCard = new Card(app.activeDeck, activeCard);
+            activeCard.save();
+            $inputs.val('');
+            $inputs.first().focus();
+        }
     };
 
     function ondisplay(card) {

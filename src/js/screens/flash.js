@@ -2,6 +2,7 @@ function flashScreen ($screen) {
     var $card = $screen.find('.flashcard'),
         $response = $screen.find('.response'),
         $listLink = $screen.find('a.list'),
+        $editButton = $screen.find('button.edit'),
         activeCard;
 
     log.debug('$screen', $screen)
@@ -54,8 +55,17 @@ function flashScreen ($screen) {
 
     function ondisplay() {
         log.trace(arguments);
-        activeCard || showNextCard()
+        if(activeCard) {
+            if($card.hasClass('correct') || $card.hasClass('incorrect'))
+                $card.html(activeCard.back);
+            else
+                $card.html(activeCard.front);
+        } else {
+            showNextCard()
+        }
     }
+
+    $editButton.click(function () { app.displayScreen('edit', activeCard) });
 
     return {
         ondisplay: ondisplay

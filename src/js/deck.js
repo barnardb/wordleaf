@@ -6,24 +6,24 @@ function Deck(data, database) {
                 '<div class="side">' +
                 '    <label for="front"><h3>Front</h3></label>' +
                 '    <div class="display">' +
-                '        <textarea id="front"/></textarea>' +
+                '        <textarea id="front"><%= front %></textarea>' +
                 '    </div>' +
                 '    <div class="acceptableInputs">' +
                 '        <label for="frontAcceptableInput">Accepts</label>' +
-                '        <input type="text" id="frontAcceptableInput" class="acceptableInput"/>' +
+                '        <input type="text" id="frontAcceptableInput" class="acceptableInput" value="<%= frontExpected %>"/>' +
                 '   </div>' +
                 '</div>' +
                 '<div class="side">' +
                 '    <label for="back"><h3>Back</h3></label>' +
                 '    <div class="display">' +
-                '        <textarea id="back"/></textarea>' +
+                '        <textarea id="back"><%= back %></textarea>' +
                 '    </div>' +
                 '    <div class="acceptableInputs">' +
                 '        <label for="backAcceptableInput">Accepts</label>' +
-                '        <input type="text" id="backAcceptableInput" class="acceptableInput"/>' +
+                '        <input type="text" id="backAcceptableInput" class="acceptableInput" value="<%= backExpected %>"/>' +
                 '    </div>' +
                 '</div>' +
-                '<button class="create">Create</button>');
+                '<button class="create">Save</button>');
 
     function forEachCard(callback) {
         log.trace(arguments);

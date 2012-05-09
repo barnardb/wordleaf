@@ -8,12 +8,12 @@ function createApp() {
     var screens = {};
 
     function displayScreen(name) {
-        log.trace()
+        log.trace(arguments);
         var $screen = $screens.filter('.' + name)
         $screen.show().find('input:first').focus()
         $screens.not($screen).hide()
         var screen = screens[name];
-        screen.ondisplay && screen.ondisplay();
+        screen.ondisplay && screen.ondisplay.apply(screen, Array.prototype.slice.call(arguments, 1));
     }
 
     function initialiseScreen(name) {

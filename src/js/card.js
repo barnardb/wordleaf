@@ -60,7 +60,11 @@ function Card(deck, data) {
 
     return {
         get back() { return data.back },
+        get backExpected() { return data.backExpected },
+        get created() { return data.created },
+        get data() { return data },
         get front() { return data.front },
+        get frontExpected() { return data.frontExpected },
         get nextScheduledFor() { return data.nextScheduledFor },
         evaluateResponse: evaluateResponse,
         isValidResponse: isValidResponse,
