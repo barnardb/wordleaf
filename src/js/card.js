@@ -2,8 +2,7 @@ function Card(deck, data) {
     log.trace(arguments);
 
     function isValidResponse(response) {
-        log.debugEquality('response.trim()', response.trim(), 'data.backExpected', data.backExpected)
-        return response.trim() == data.backExpected
+        return _.include(utils.array(data.backExpected), response.trim());
     }
 
     function calculateNewDelay(now, isCorrect) {
@@ -55,12 +54,13 @@ function Card(deck, data) {
     }
 
     data.deck = deck.id;
+    data.frontExpected = utils.deArray(data.frontExpected);
+    data.backExpected = utils.deArray(data.backExpected);
     if(!data.created) {
         data.created = Date.now();
         data.scheduledDelay = 60 * 60 * 1000;
         data.nextScheduledFor = data.created + data.scheduledDelay;
     }
-    console.debug('data.nextScheduledFor', data.nextScheduledFor);
 
     return {
         get back() { return data.back },

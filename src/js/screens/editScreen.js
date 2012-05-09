@@ -3,18 +3,11 @@ function editScreen($screen) {
 
     var $form = $screen.find('form'),
         $feedback = $screen.find('.feedback'),
-        $cardFaces,
-        $inputs,
         $front,
-        $frontAcceptable,
         $back,
-        $backAcceptable,
-        activeCard;
-
-    log.debug('$inputs', $inputs);
-    log.debug('$front', $front);
-    log.debug('$back', $back);
-    log.debug('$form', $form);
+        activeCard,
+        frontAcceptableList,
+        backAcceptableList;
 
     function extractAcceptableResponse(html) {
         return htmlUtils.extractText(html.split('\n')[0]).replace(/\([^()]*\)/g, ' ').replace(/\s+/g, ' ').trim();
@@ -24,29 +17,34 @@ function editScreen($screen) {
         log.trace(arguments)
 
         var $face = $(this),
-            $acceptable = $face.closest('.side').find('.acceptableInput');
+            $acceptable = $face.closest('.side').find('.acceptableInput:first');
 
         log.debug('$face', $face);
         log.debug('$acceptable', $acceptable);
 
         var calculatedAcceptable = extractAcceptableResponse($face.val());
         $acceptable.val(calculatedAcceptable);
+        $acceptable.trigger('input');
     }
 
     function considerNewCardRequest(evt) {
-        log.trace(arguments)
-        evt.preventDefault()
-        firstBlankInput = _.find($inputs, function (i) { return !i.value })
+        log.trace(arguments);
+        evt.preventDefault();
+        var $inputs = $screen.find('textarea')
+                .add(frontAcceptableList.significantInputs)
+                .add(backAcceptableList.significantInputs),
+            firstBlankInput = _.find($inputs, function (i) { return !i.value })
         if (firstBlankInput) {
             $(firstBlankInput).focus()
             return
         }
         var data = {
             front: $front.val(),
-            frontExpected: $frontAcceptable.val(),
+            frontExpected: frontAcceptableList.values,
             back: $back.val(),
-            backExpected: $backAcceptable.val()
+            backExpected: backAcceptableList.values
         };
+        console.debug('data', data);
         if (activeCard.created) {
             _.extend(activeCard.data, data);
             activeCard.save();
@@ -54,8 +52,7 @@ function editScreen($screen) {
         } else {
             activeCard = new Card(app.activeDeck, activeCard);
             activeCard.save();
-            $inputs.val('');
-            $inputs.first().focus();
+            ondisplay();
         }
     };
 
@@ -67,14 +64,12 @@ function editScreen($screen) {
         log.debug('activeCard', activeCard);
         $form.html(app.activeDeck.cardEditTemplate(activeCard));
 
-        $cardFaces = $screen.find('.side textarea', $screen);
-        $inputs = $screen.find('input').add($cardFaces);
-        $front = $cardFaces.filter('#front');
-        $frontAcceptable = $inputs.filter('#frontAcceptableInput');
-        $back = $cardFaces.filter('#back');
-        $backAcceptable = $inputs.filter('#backAcceptableInput');
+        $front = $form.find('#front');
+        $back = $form.find('#back');
+        $front.add($back).on('input', updateAcceptableAnswers);
 
-        $cardFaces.on('input', updateAcceptableAnswers)
+        frontAcceptableList = uiEditableList($screen.find('.front .acceptableInput'), '<input type="text" class="acceptableInput"/>');
+        backAcceptableList = uiEditableList($screen.find('.back .acceptableInput'), '<input type="text" class="acceptableInput"/>');
     }
 
     $form.submit(considerNewCardRequest);

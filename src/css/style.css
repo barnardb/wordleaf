@@ -85,6 +85,15 @@ input {
     margin-left: 2em;
 }
 
+.edit.screen .acceptableInputs {
+    text-align: right;
+    width: 18em;
+}
+
+.edit.screen input {
+    margin-bottom: 0.5em;
+}
+
 
 .import.screen textarea {
     width: 60em;
