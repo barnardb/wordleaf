@@ -12,9 +12,9 @@ function Card(deck, data) {
             normalisedDelay = Math.sqrt(actualDelay / data.scheduledDelay) * data.scheduledDelay;
 
         log.debug('lastSeen', lastSeen);
-        log.debug('now - lastSeen', now - lastSeen);
-        log.debug('data.scheduledDelay', data.scheduledDelay);
-        log.debug('normalisedDelay', normalisedDelay);
+        log.debug('timeUtils.formatDuration(data.scheduledDelay)', timeUtils.formatDuration(data.scheduledDelay));
+        log.debug('timeUtils.formatDuration(actualDelay)', timeUtils.formatDuration(actualDelay));
+        log.debug('timeUtils.formatDuration(normalisedDelay)', timeUtils.formatDuration(normalisedDelay));
 
         if(isCorrect) {
             return 2 * normalisedDelay;
@@ -35,7 +35,10 @@ function Card(deck, data) {
             interpretation: isCorrect
         })
 
+        var oldDelay = data.scheduledDelay;
         data.scheduledDelay = Math.max(calculateNewDelay(now, isCorrect), 30 * 1000);
+        log.info('Delay scaled by a factor of ' + (data.scheduledDelay / oldDelay) + ' from ' + timeUtils.formatDuration(oldDelay) + ' to ' + timeUtils.formatDuration(data.scheduledDelay));
+
         data.lastAnswered = now;
         data.nextScheduledFor = now + data.scheduledDelay;
 
