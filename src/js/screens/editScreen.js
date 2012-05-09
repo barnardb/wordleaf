@@ -64,7 +64,8 @@ function editScreen($screen) {
         $feedback.text('');
 
         activeCard = card || {};
-        $form.html(app.activeDeck.cardEditTemplate(card));
+        log.debug('activeCard', activeCard);
+        $form.html(app.activeDeck.cardEditTemplate(activeCard));
 
         $cardFaces = $screen.find('.side textarea', $screen);
         $inputs = $screen.find('input').add($cardFaces);

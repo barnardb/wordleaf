@@ -6,24 +6,26 @@ function Deck(data, database) {
                 '<div class="side">' +
                 '    <label for="front"><h3>Front</h3></label>' +
                 '    <div class="display">' +
-                '        <textarea id="front"><%= front %></textarea>' +
+                '        <textarea id="front"><%= data.front || "" %></textarea>' +
                 '    </div>' +
                 '    <div class="acceptableInputs">' +
                 '        <label for="frontAcceptableInput">Accepts</label>' +
-                '        <input type="text" id="frontAcceptableInput" class="acceptableInput" value="<%= frontExpected %>"/>' +
+                '        <input type="text" id="frontAcceptableInput" class="acceptableInput" value="<%= data.frontExpected || "" %>"/>' +
                 '   </div>' +
                 '</div>' +
                 '<div class="side">' +
                 '    <label for="back"><h3>Back</h3></label>' +
                 '    <div class="display">' +
-                '        <textarea id="back"><%= back %></textarea>' +
+                '        <textarea id="back"><%= data.back || "" %></textarea>' +
                 '    </div>' +
                 '    <div class="acceptableInputs">' +
                 '        <label for="backAcceptableInput">Accepts</label>' +
-                '        <input type="text" id="backAcceptableInput" class="acceptableInput" value="<%= backExpected %>"/>' +
+                '        <input type="text" id="backAcceptableInput" class="acceptableInput" value="<%= data.backExpected || "" %>"/>' +
                 '    </div>' +
                 '</div>' +
-                '<button class="create">Save</button>');
+                '<button class="create">Save</button>',
+                null,
+                { variable: 'data' });
 
     function forEachCard(callback) {
         log.trace(arguments);
