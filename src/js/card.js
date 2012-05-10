@@ -1,7 +1,10 @@
 function Card(deck, data) {
 
     function isValidResponse(response) {
-        return _.include(utils.array(data.backExpected), response.trim());
+        console.debug('expecting', JSON.stringify(data.backExpected));
+        var isValid = _.include(utils.array(data.backExpected), response.trim());
+        console.debug(JSON.stringify(response.trim()), isValid ? '∈' : '∉', JSON.stringify(utils.array(data.backExpected)));
+        return isValid;
     }
 
     function calculateNewDelay(now, isCorrect) {
