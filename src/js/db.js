@@ -46,7 +46,6 @@ var idbUtils = (function () {
 function wrapDatabase(database) {
 
     function getTransactionalStore(name, writable) {
-        log.trace(arguments);
         var mode = writable ? IDBTransaction.READ_WRITE : IDBTransaction.READ_ONLY;
         return database.transaction([name], mode).objectStore(name);
     }

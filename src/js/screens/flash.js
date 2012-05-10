@@ -9,15 +9,13 @@ function flashScreen ($screen) {
     log.debug('$listLink', $listLink);
 
     function giveFeedback(isCorrect, feedback) {
-        log.trace();
         $card.addClass(isCorrect ? 'correct' : 'incorrect');
         $card.html(feedback)
         $response.val('')
     };
 
     function processReinforcement(evt) {
-        log.trace();
-        evt.preventDefault()
+        evt.preventDefault();
         if (activeCard.isValidResponse($response.val())) {
             $response.parent()[0].removeEventListener('submit', processReinforcement)
             $card.removeClass('correct incorrect')
@@ -29,7 +27,7 @@ function flashScreen ($screen) {
     }
 
     function processFirstResponse(evt) {
-        log.trace();
+        log.trace(evt);
         evt.preventDefault()
         activeCard.evaluateResponse($response.val(), function (isCorrect, feedback) {
             giveFeedback(isCorrect, feedback)

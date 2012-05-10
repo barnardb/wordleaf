@@ -1,9 +1,10 @@
 function Card(deck, data) {
 
     function isValidResponse(response) {
-        console.debug('expecting', JSON.stringify(data.backExpected));
-        var isValid = _.include(utils.array(data.backExpected), response.trim());
-        console.debug(JSON.stringify(response.trim()), isValid ? '∈' : '∉', JSON.stringify(utils.array(data.backExpected)));
+        response = response.trim();
+        var expected = utils.array(data.backExpected),
+            isValid = _.include(utils.array(data.backExpected), response.trim());
+        log.debug(JSON.stringify(response), isValid ? '∈' : '∉', JSON.stringify(expected));
         return isValid;
     }
 
@@ -25,7 +26,7 @@ function Card(deck, data) {
     }
 
     function evaluateResponse(response, callback) {
-        log.trace();
+        log.trace(arguments);
         var now = Date.now();
         var isCorrect = isValidResponse(response);
         (data.responses || (data.responses = [])).push({
@@ -48,7 +49,6 @@ function Card(deck, data) {
     }
 
     function save() {
-        log.trace(arguments);
         log.debug('data', data);
         idbUtils.perform(deck.database.getTransactionalStore('Cards', true).put(data), function(id) {
             data.id = id;
