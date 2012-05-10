@@ -28,6 +28,7 @@ function createApp() {
         screens[name] = screen;
     }
 
+    log.level = 'INFO';
     screenNames.forEach(initialiseScreen);
     openUserDatabase('dev', function (user) {
         activeUser = user;

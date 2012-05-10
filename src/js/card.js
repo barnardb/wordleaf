@@ -39,7 +39,7 @@ function Card(deck, data) {
 
         var oldDelay = data.scheduledDelay;
         data.scheduledDelay = Math.max(calculateNewDelay(now, isCorrect), 30 * 1000);
-        log.info('Delay scaled by a factor of ' + (data.scheduledDelay / oldDelay) + ' from ' + timeUtils.formatDuration(oldDelay) + ' to ' + timeUtils.formatDuration(data.scheduledDelay));
+        log.info('Delay scaled by a factor of ' + (data.scheduledDelay / oldDelay).toPrecision(4) + ' from ' + timeUtils.formatDuration(oldDelay) + ' to ' + timeUtils.formatDuration(data.scheduledDelay));
 
         data.lastAnswered = now;
         data.nextScheduledFor = now + data.scheduledDelay;

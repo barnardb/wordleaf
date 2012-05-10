@@ -44,12 +44,22 @@ var log = (function () {
         console.debug.apply(console, lineItems)
     }
 
+    var levels = [error, warn, info, debug, trace];
+    function nullLogger() {}
+
     return {
         error: error,
         warn: warn,
         info: info,
         debug: debug,
         debugEquality: debugEquality,
-        trace: trace
+        trace: trace,
+        set level(level) {
+            var enabled = true;
+            levels.forEach(function (l) {
+                log[l.name] = enabled ? l : nullLogger;
+                enabled && (enabled = l.name != level.toLowerCase());
+            });
+        }
     };
 })();
