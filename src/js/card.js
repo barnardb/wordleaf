@@ -1,5 +1,4 @@
 function Card(deck, data) {
-    log.trace(arguments);
 
     function isValidResponse(response) {
         return _.include(utils.array(data.backExpected), response.trim());

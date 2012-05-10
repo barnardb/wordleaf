@@ -1,11 +1,11 @@
 function User(database) {
     log.trace(arguments)
 
-    function forEachDeck(callback) {
+    function forEachDeck(callback, completionCallback) {
         log.trace(arguments);
         database.forEachValueInStore('Decks', function(data) {
             callback(new Deck(data, database));
-        });
+        }, completionCallback);
     }
 
     function openDeck(name, callback) {

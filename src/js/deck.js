@@ -21,12 +21,14 @@ function Deck(data, database) {
                 null,
                 { variable: 'data' });
 
-    function forEachCard(callback) {
+    function forEachCard(cardCallback, completionCallback) {
         log.trace(arguments);
         idbUtils.perform(database.getTransactionalStore('Cards').index('deck').openCursor(data.id), function(cursor) {
             if(cursor && cursor.value) {
-                callback(new Card(deck, cursor.value));
+                cardCallback(new Card(deck, cursor.value));
                 cursor.continue();
+            } else {
+                completionCallback();
             }
         });
     }

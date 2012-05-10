@@ -58,12 +58,14 @@ function wrapDatabase(database) {
         });
     };
 
-    function forEachValueInStore(name, callback) {
+    function forEachValueInStore(name, callback, completionCallback) {
         log.trace(arguments);
         performWithStore(name, 'openCursor', function(cursor) {
             if(cursor && cursor.value) {
                 callback(cursor.value);
                 cursor.continue();
+            } else {
+                completionCallback();
             }
         });
     }

@@ -11,19 +11,23 @@ function uiList($scope, name, template, events) {
     log.debug('$list', $list);
 
     function addToList(item) {
-        $node = $(template(item))
+        $node = $(template(item));
         events && _.each(events, function(handler, name) {
             $node[name](function() { handler(item) });
-        })
-        $list.append($node)
-        $count.text(count += 1);
+        });
+        $list.append($node);
+        count += 1;
     }
 
     function update(iterator) {
         log.trace(arguments)
+        $list.hide();
         $list.children().remove()
-        $count.text(count = 0)
-        iterator(addToList)
+        count = 0
+        iterator(addToList, function () {
+            $count.text(count);
+            $list.show();
+        });
     }
 
     return {
