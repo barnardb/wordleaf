@@ -8,7 +8,25 @@ function importScreen($screen) {
     log.debug('$importData', $importData);
 
     function importData() {
-        $importData.val().split('\n').forEach(function (line) {
+        var data = $importData.val();
+        try {
+            var data = JSON.parse(data);
+        } catch (e) {
+            importLineData(data);
+        }
+        importFromJson(data);
+
+        app.displayScreen('deck');
+    }
+
+    function importFromJson(data) {
+        data.cards.forEach(function (cardData) {
+           new Card(app.activeDeck, cardData).save();
+        });
+    }
+
+    function importLineData(data) {
+       data.split('\n').forEach(function (line) {
             line = line.trim()
             if(!line)
                 return;
