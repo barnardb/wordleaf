@@ -19,9 +19,9 @@ function Card(deck, data) {
         log.debug('timeUtils.formatDuration(normalisedDelay)', timeUtils.formatDuration(normalisedDelay));
 
         if(isCorrect) {
-            return 2 * normalisedDelay;
+            return data.scheduledDelay + 2 * normalisedDelay;
         } else {
-            return Math.min(normalisedDelay / 2, data.scheduledDelay);
+            return Math.min(normalisedDelay / 2, 2/3 * data.scheduledDelay);
         }
     }
 
