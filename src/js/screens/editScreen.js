@@ -51,7 +51,7 @@ function editScreen($screen) {
             activeCard.save();
             app.displayScreen('flash');
         } else {
-            activeCard = new Card(app.activeDeck, activeCard);
+            activeCard = new Card(app.activeDeck, data);
             activeCard.save();
             ondisplay();
         }
