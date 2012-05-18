@@ -48,6 +48,10 @@ function Card(deck, data) {
         callback(isCorrect, data.back)
     }
 
+    function remove(callback) {
+        idbUtils.perform(deck.database.getTransactionalStore('Cards', true).delete(data.id), callback);
+    }
+
     function save() {
         log.debug('data', data);
         idbUtils.perform(deck.database.getTransactionalStore('Cards', true).put(data), function(id) {
@@ -74,6 +78,7 @@ function Card(deck, data) {
         get nextScheduledFor() { return data.nextScheduledFor },
         evaluateResponse: evaluateResponse,
         isValidResponse: isValidResponse,
+        remove: remove,
         save: save
     };
 }

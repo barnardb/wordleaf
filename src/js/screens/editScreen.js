@@ -3,6 +3,7 @@ function editScreen($screen) {
 
     var $form = $screen.find('form'),
         $feedback = $screen.find('.feedback'),
+        $deleteButton = $screen.find('button.delete'),
         $front,
         $back,
         activeCard,
@@ -63,6 +64,7 @@ function editScreen($screen) {
         activeCard = card || {};
         log.debug('activeCard', activeCard);
         $form.html(app.activeDeck.cardEditTemplate(activeCard));
+        card ? $deleteButton.show() : $deleteButton.hide();
 
         $front = $form.find('#front');
         $back = $form.find('#back');
@@ -72,7 +74,16 @@ function editScreen($screen) {
         backAcceptableList = uiEditableList($screen.find('.back .acceptableInput'), '<input type="text" class="acceptableInput"/>');
     }
 
+    function deleteCard() {
+        log.trace(arguments);
+        log.debug('deleting', activeCard);
+        activeCard.remove(function () {
+            app.displayScreen('flash');
+        });
+    };
+
     $form.submit(considerNewCardRequest);
+    $deleteButton.click(deleteCard);
 
     return {
         ondisplay: ondisplay
