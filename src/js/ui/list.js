@@ -11,6 +11,7 @@ function uiList($scope, name, template, events) {
     log.debug('$list', $list);
 
     function addToList(item) {
+        log.trace(arguments);
         $node = $(template(item));
         events && _.each(events, function(handler, name) {
             $node[name](function() { handler(item) });
