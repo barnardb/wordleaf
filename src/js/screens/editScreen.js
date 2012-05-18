@@ -78,7 +78,7 @@ function editScreen($screen) {
         log.trace(arguments);
         log.debug('deleting', activeCard);
         activeCard.remove(function () {
-            app.displayScreen('drill');
+            app.displayScreen('deck');
         });
     };
 
