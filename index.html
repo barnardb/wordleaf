@@ -18,26 +18,32 @@
             </form>
         </div>
         <div class="drill screen">
-            <a class="deck">Manage this deck</a>
             <div class="flashcard">
             </div>
             <form>
                 <input type="text" class="response"/>
             </form>
-            <button class="edit">Edit Card</button>
+            <a class="edit">Edit card</a>
+            <nav>
+                <a class="deck">End drill</a>
+            </nav>
         </div>
         <div class="deck screen">
             <h2>Manage Deck: <span class="deck name"></span></h2>
-            <a class="drill">Back to drill screen</a>
-            <a class="edit">Add new words</a>
-            <a class="import">Bulk import cards</a>
-            <a class="export">Export cards</a>
+            <nav>
+                <a class="drill">Back to drill screen</a>
+                <a class="edit">Add new words</a>
+                <a class="import">Bulk import cards</a>
+                <a class="export">Export cards</a>
+            </nav>
             <h3>Words (<span class="word count"></span>)</h3>
             <ul class="word list"></ul>
         </div>
         <div class="edit screen">
-            <a class="drill">Back to drill screen</a>
-            <a class="deck">Back to deck management</a>
+            <nav>
+                <a class="drill">Back to drill screen</a>
+                <a class="deck">Back to deck management</a>
+            </nav>
             <h2>Create Card</h2>
             <form></form>
             <button class="delete">Delete</button>
@@ -67,7 +73,9 @@
         </div>
         <div class="import screen">
             <h2>Bulk Import</h2>
-            <a class="deck">Back to deck management</a>
+            <nav>
+                <a class="deck">Back to deck management</a>
+            </nav>
             <p>
                 <label for="importData">Yummies please!</label>
                 <button class="import">Import</button>
@@ -76,7 +84,9 @@
         </div>
         <div class="export screen">
             <h2>Export</h2>
-            <a class="deck">Back to deck management</a>
+            <nav>
+                <a class="deck">Back to deck management</a>
+            </nav>
             <label for="exportData">Your yummies!</label>
             <textarea id="exportData"></textarea>
         </div>

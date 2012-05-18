@@ -19,7 +19,7 @@ function createApp() {
     function initialiseScreen(name) {
         var $screen = $screens.filter('.' + name);
         var screen = eval(name + 'Screen($screen)');
-        _.each($screen.find('a'), function (link) {
+        _.each($screen.find('nav a'), function (link) {
             log.debug('mapping click on', link, 'to display screen', link.className);
             $(link).click(function () {
                 displayScreen(link.className);

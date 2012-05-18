@@ -1,12 +1,10 @@
 function drillScreen ($screen) {
     var $card = $screen.find('.flashcard'),
         $response = $screen.find('.response'),
-        $listLink = $screen.find('a.list'),
-        $editButton = $screen.find('button.edit'),
+        $editLink = $screen.find('a.edit'),
         activeCard;
 
     log.debug('$screen', $screen)
-    log.debug('$listLink', $listLink);
 
     function giveFeedback(isCorrect, feedback) {
         $card.addClass(isCorrect ? 'correct' : 'incorrect');
@@ -63,7 +61,7 @@ function drillScreen ($screen) {
         }
     }
 
-    $editButton.click(function () { app.displayScreen('edit', activeCard) });
+    $editLink.click(function () { app.displayScreen('edit', activeCard) });
 
     return {
         ondisplay: ondisplay
