@@ -10,7 +10,7 @@ function topScreen($screen) {
     function selectDeck(deck) {
         log.trace(arguments);
         app.activeDeck = deck
-        app.displayScreen('flash')
+        app.displayScreen('drill')
     }
 
     function ondisplay() {

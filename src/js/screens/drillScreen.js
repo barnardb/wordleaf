@@ -1,4 +1,4 @@
-function flashScreen ($screen) {
+function drillScreen ($screen) {
     var $card = $screen.find('.flashcard'),
         $response = $screen.find('.response'),
         $listLink = $screen.find('a.list'),

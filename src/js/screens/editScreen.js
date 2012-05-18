@@ -49,7 +49,7 @@ function editScreen($screen) {
         if (activeCard.created) {
             _.extend(activeCard.data, data);
             activeCard.save();
-            app.displayScreen('flash');
+            app.displayScreen('drill');
         } else {
             activeCard = new Card(app.activeDeck, data);
             activeCard.save();
@@ -78,7 +78,7 @@ function editScreen($screen) {
         log.trace(arguments);
         log.debug('deleting', activeCard);
         activeCard.remove(function () {
-            app.displayScreen('flash');
+            app.displayScreen('drill');
         });
     };
 
