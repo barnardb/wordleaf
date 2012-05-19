@@ -2,48 +2,78 @@ function importScreen($screen) {
     log.trace(arguments);
 
     var $importButton = $screen.find('button.import'),
-        $importData = $screen.find('#importData');
+        $importData = $screen.find('#importData'),
+        $feedback = $screen.find('.feedback');
 
     log.debug('$importButton', $importButton);
     log.debug('$importData', $importData);
 
-    function importData() {
-        var data = $importData.val();
+    function convertToCardDataObjects(text) {
         try {
-            var data = JSON.parse(data);
+            return JSON.parse(text).cards;
         } catch (e) {
-            importLineData(data);
+            return parseLineData(text);
         }
-        importFromJson(data);
+    };
 
+    function importData() {
+        log.trace(arguments);
+        try {
+            var cardDataList = convertToCardDataObjects($importData.val());
+            importCardData(cardDataList);
+        } catch (e) {
+            $feedback.text(_.map(e, function (item) {
+                return 'Error for card at position ' + (item.key + 1) + ': ' + item.error;
+            }).join('\n'));
+            return;
+        }
         app.displayScreen('deck');
     }
 
-    function importFromJson(data) {
-        data.cards.forEach(function (cardData) {
-           new Card(app.activeDeck, cardData).save();
+    function importCardData(cardDataList) {
+        var cards = mapWithCollectiveErrors(cardDataList, function(cardData) {
+            return new Card(app.activeDeck, cardData);
         });
+        _.invoke(cards, 'save');
     }
 
-    function importLineData(data) {
-       data.split('\n').forEach(function (line) {
-            line = line.trim()
-            if(!line)
-                return;
-            var fields = line.split('\t');
-            if(fields.length != 2) {
-                log.error("Expected 2 fields but got", fields.length, "from line", line, fields);
-                return;
+    function mapWithCollectiveErrors(obj, func) {
+        var errors = [];
+        var results = _.map(obj, function (val, key) {
+            try {
+                return func.apply(this, arguments);
+            } catch(e) {
+                errors.push({
+                    key: key,
+                    error: e
+                });
             }
-            new Card(app.activeDeck, {
+        });
+        if (errors.length)
+            throw errors;
+        return results;
+    }
+
+    function parseLineData(data) {
+        function extractExpected(field) {
+            var expected = _.invoke(htmlUtils.extractText(field).split('/'), 'trim');
+            if (!expected)
+                throw 'Expected field to contain at least one extractable expected response';
+            return expected;
+        };
+        return mapWithCollectiveErrors(_.compact(_.invoke(data.split('\n'), 'trim')), function (line) {
+            var fields = line.split('\t');
+            if (fields.length != 2) {
+                throw 'Expected 2 tab-separated fields but got ' + fields.length + ' from line ' + line + ': ' + fields;
+            }
+            return {
                 front: fields[0].trim(),
-                frontExpected: htmlUtils.extractText(fields[0]),
+                frontExpected: extractExpected(fields[0]),
                 back: fields[1].trim(),
-                backExpected: htmlUtils.extractText(fields[1]),
-                nextScheduledFor: Time.now()
-            }).save()
-        })
-        app.displayScreen('deck');
+                backExpected: extractExpected(fields[1]),
+                nextScheduledFor: Date.now()
+            };
+        });
     }
 
     $importButton.click(importData);
