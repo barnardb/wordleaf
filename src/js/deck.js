@@ -6,14 +6,14 @@ function Deck(data, database) {
                 '<% _.each({ front: "Front", back: "Back" }, function(title, side) { %>' +
                 '    <div class="<%= side %> side">' +
                 '        <label for="<%= side %>"><h3><%= title %></h3></label>' +
-                '        <div class="display">' +
-                '            <textarea id="<%= side %>"><%= data[side] || "" %></textarea>' +
-                '        </div>' +
                 '        <div class="acceptableInputs">' +
                 '            <label for="<%= side %>AcceptableInput">Accepts</label>' +
                 '            <% _.each(utils.array(data[side + "Expected"]).concat([""]), function (expected, index) { %>' +
                 '                <input type="text" <% index || print(\'id="<%= side %>AcceptableInput"\') %> class="acceptableInput" value="<%= expected %>"/>' +
                 '            <% }) %>' +
+                '        </div>' +
+                '        <div class="display">' +
+                '            <textarea id="<%= side %>"><%= data[side] || "" %></textarea>' +
                 '        </div>' +
                 '    </div>' +
                 '<% }) %>' +

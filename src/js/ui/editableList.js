@@ -1,5 +1,7 @@
-function uiEditableList($elements, emptyHtml) {
-    log.trace(arguments)
+function uiEditableList($elements, emptyHtml, events) {
+    log.trace(arguments);
+
+    var values;
 
     function getElementThatWillReceiveTheFocus(callback) {
         setTimeout(function () {
@@ -22,11 +24,22 @@ function uiEditableList($elements, emptyHtml) {
         }
     }
 
-    function considerAddingOrRemoveEmptyNextElement(evt) {
+    function handleInput(evt) {
         log.trace(arguments);
-        var $target = $(evt.target);
+        var $target = $(evt.target),
+            index = _.indexOf($elements, evt.target),
+            oldValue = values[index],
+            value = $target.val().trim();
+
+        values[index] = value;
+        considerAddingOrRemoveEmptyNextElement($target, value);
+        events.input(value, oldValue, index);
+    }
+
+    function considerAddingOrRemoveEmptyNextElement($target, value) {
+        log.trace(arguments);
         var $next = $target.next();
-        if (!$target.val().trim()) {
+        if (!value) {
             if ($next.length && !$next.val()) {
                 $elements = $elements.not($next);
                 $next.remove();
@@ -34,7 +47,7 @@ function uiEditableList($elements, emptyHtml) {
         } else {
             if(!$next.length) {
                 $next = $('<input type="text" class="acceptableInput"/>');
-                $next.on('input', considerAddingOrRemoveEmptyNextElement);
+                $next.on('input', handleInput);
                 $next.on('change', consumeNextIfMissingContent);
                 $elements = $elements.add($next);
                 $target.after($next);
@@ -42,7 +55,9 @@ function uiEditableList($elements, emptyHtml) {
         }
     }
 
-    $elements.on('input', considerAddingOrRemoveEmptyNextElement);
+    values = _.compact(_.map($elements, function (e) { return e.value.trim() }));
+
+    $elements.on('input', handleInput);
     $elements.on('change', consumeNextIfMissingContent);
 
     return {

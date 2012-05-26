@@ -11,21 +11,34 @@ function editScreen($screen) {
         backAcceptableList;
 
     function extractAcceptableResponse(html) {
-        return htmlUtils.extractText(html.split('\n')[0]).replace(/\([^()]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+        return html ? htmlUtils.extractText(html.split('\n')[0]).replace(/\([^()]*\)/g, ' ').replace(/\s+/g, ' ').trim() : undefined;
     }
 
-    function updateAcceptableAnswers(evt) {
-        log.trace(arguments)
+    function displayUpdater($display) {
+        return function updateDisplay(newValue, oldValue, index) {
+            log.trace(arguments);
 
-        var $face = $(this),
-            $acceptable = $face.closest('.side').find('.acceptableInput:first');
+            log.debug('$display', $display);
 
-        log.debug('$face', $face);
-        log.debug('$acceptable', $acceptable);
+            var oldDisplay = $display.val(),
+                alternatives = oldDisplay.split(' / ');
 
-        var calculatedAcceptable = extractAcceptableResponse($face.val());
-        $acceptable.val(calculatedAcceptable);
-        $acceptable.trigger('input');
+            log.debug('alternatives', alternatives);
+
+            if (oldValue) {
+                if (newValue) {
+                    if(extractAcceptableResponse(alternatives[index]) == oldValue)
+                        alternatives[index] = alternatives[index].replace(oldValue, newValue);
+                } else {
+                    alternatives.splice(index, 1);
+                }
+            } else {
+                alternatives.splice(index, alternatives[index] ? 0 : 1, newValue);
+            }
+
+            var newDisplay = alternatives.join(' / ');
+            newDisplay == oldDisplay || $display.val(newDisplay);
+        }
     }
 
     function considerNewCardRequest(evt) {
@@ -68,10 +81,18 @@ function editScreen($screen) {
 
         $front = $form.find('#front');
         $back = $form.find('#back');
-        $front.add($back).on('input', updateAcceptableAnswers);
 
-        frontAcceptableList = uiEditableList($screen.find('.front .acceptableInput'), '<input type="text" class="acceptableInput"/>');
-        backAcceptableList = uiEditableList($screen.find('.back .acceptableInput'), '<input type="text" class="acceptableInput"/>');
+        function acceptableList(side) {
+            var $side = $screen.find('.side.' + side);
+            return uiEditableList(
+                    $side.find('.acceptableInput'),
+                    '<input type="text" class="acceptableInput"/>',
+                    { input: displayUpdater($side.find('.display textarea')) });
+        }
+        frontAcceptableList = acceptableList('front');
+        backAcceptableList = acceptableList('back');
+
+        $screen.find('#frontAcceptableInput').focus();
     }
 
     function deleteCard() {
