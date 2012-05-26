@@ -13,7 +13,7 @@ function exportScreen($screen) {
             cardData.push(card.data);
         }, function () {
             log.debug('after cards', data);
-            $data.text(JSON.stringify(data));
+            $data.text(JSON.stringify(data, null, 4));
         });
     }
 
