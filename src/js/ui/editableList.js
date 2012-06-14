@@ -46,7 +46,7 @@ function uiEditableList($elements, emptyHtml, events) {
             }
         } else {
             if(!$next.length) {
-                $next = $('<input type="text" class="acceptableInput"/>');
+                $next = $(emptyHtml);
                 $next.on('input', handleInput);
                 $next.on('change', consumeNextIfMissingContent);
                 $elements = $elements.add($next);
@@ -63,6 +63,9 @@ function uiEditableList($elements, emptyHtml, events) {
     return {
         get values() {
             return _.compact(_.map($elements, function (e) { return e.value.trim() }));
+        },
+        get firstElement() {
+            return $elements[0];
         }
     };
 }

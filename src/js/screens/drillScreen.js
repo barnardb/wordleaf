@@ -40,7 +40,7 @@ function drillScreen ($screen) {
         app.activeDeck.getNextCard(function (card) {
             activeCard = card
             if(!card) {
-                app.displayScreen('edit');
+                app.displayScreen('deck');
                 return;
             }
             $card.html(card.front)

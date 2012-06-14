@@ -19,7 +19,10 @@ function Card(deck, data) {
         log.debug('timeUtils.formatDuration(normalisedDelay)', timeUtils.formatDuration(normalisedDelay));
 
         if(isCorrect) {
-            return data.scheduledDelay + 2 * normalisedDelay;
+            var delay = data.scheduledDelay + 2 * normalisedDelay;
+            if(data.responses.length >= 3 && _.all(_.pluck(_.last(data.responses, 3), 'interpretation'), _.identity))
+                delay *= 1 + Math.random() * Math.random() / 10;
+            return delay;
         } else {
             return Math.min(normalisedDelay / 2, 2/3 * data.scheduledDelay);
         }

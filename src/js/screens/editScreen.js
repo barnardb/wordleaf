@@ -45,8 +45,8 @@ function editScreen($screen) {
         log.trace(arguments);
         evt.preventDefault();
         var $inputs = $screen.find('textarea')
-                .add(frontAcceptableList.significantInputs)
-                .add(backAcceptableList.significantInputs),
+                .add(frontAcceptableList.firstElement)
+                .add(backAcceptableList.firstElement),
             firstBlankInput = _.find($inputs, function (i) { return !i.value })
         if (firstBlankInput) {
             $(firstBlankInput).focus()
